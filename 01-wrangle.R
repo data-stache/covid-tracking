@@ -102,13 +102,12 @@ covid_us_sum <- covid %>%
 group_by(date) %>%
   summarise(new_cases = sum(new_cases),
             new_tests = sum(new_tests),
-            percent_pos = round(new_cases / new_tests, 1),
+            percent_pos = round(new_cases / new_tests, 3),
             new_death = sum(new_death)) %>%
   # ARRANGE BY DATE (MOST RECENT -> OLDEST)
   arrange(desc(date)) %>%
   # ADD 7 DAY AVERAGES
-  mutate(sum_percent_pos = new_cases / new_tests,
-         new_cases_07da = rollapply(new_cases, width = 7, FUN=function(x) mean(x, na.rm=TRUE), by=1, by.column=TRUE, partial=TRUE, fill=NA, align="left"),
+  mutate(new_cases_07da = rollapply(new_cases, width = 7, FUN=function(x) mean(x, na.rm=TRUE), by=1, by.column=TRUE, partial=TRUE, fill=NA, align="left"),
          new_tests_07da = rollapply(new_tests, width = 7, FUN=function(x) mean(x, na.rm=TRUE), by=1, by.column=TRUE, partial=TRUE, fill=NA, align="left"),
          percent_pos_07da = rollapply(percent_pos, width = 7, FUN=function(x) mean(x, na.rm=TRUE), by=1, by.column=TRUE, partial=TRUE, fill=NA, align="left"),
          new_death_07da = rollapply(new_death, width = 7, FUN=function(x) mean(x, na.rm=TRUE), by=1, by.column=TRUE, partial=TRUE, fill=NA, align="left"))
@@ -180,9 +179,21 @@ fct_cases_zone <- function(x) {
 covid_state_zones <- covid %>%
   filter(date >= ind_wk) %>%
   group_by(state) %>%
-  summarize(s_new_cases_percap = sum(new_cases_percap),
-            m_percent_pos = mean(percent_pos, na.rm = TRUE),
-            cases_zone = fct_cases_zone(s_new_cases_percap),
-            percent_zone = fct_positive_zone(m_percent_pos)) %>%
+  summarize(sum_cases_percap = sum(new_cases_percap),
+            percent_pos = mean(percent_pos, na.rm = TRUE),
+            cases_zone = fct_cases_zone(sum_cases_percap),
+            percent_zone = fct_positive_zone(percent_pos)) %>%
   ungroup()
 save(covid_state_zones, file = "rda/covid_state_zones.rda")
+
+ind_red_perpos <- covid_state_zones %>%
+  mutate(state = as.character(state)) %>%
+  filter(percent_zone == "red") %>%
+  .$state
+save(ind_red_perpos, file = "rda/ind_red_perpos.rda")
+
+ind_red_cases <- covid_state_zones %>%
+  mutate(state = as.character(state)) %>%
+  filter(cases_zone == "red") %>%
+  .$state
+save(ind_red_cases, file = "rda/ind_red_cases.rda")

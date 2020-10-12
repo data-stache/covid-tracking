@@ -51,3 +51,4 @@ theme_DataStache <- function(base_size = 13, base_family = "") {
     )
 }
 
+save(theme_DataStache, file = "rda/theme_DataStache.rda")
