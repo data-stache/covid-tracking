@@ -49,7 +49,7 @@ p_line_covid <- covid %>%
               unhighlighted_params = list(size = .25, colour = alpha("dark grey", 0.3)),
               label_params = list(label.size = NA,
                                   x = ymd(20200501),
-                                  y = 35,
+                                  y = 75,
                                   hjust = 1,
                                   size = 1.2,
                                   color = "dark blue",
