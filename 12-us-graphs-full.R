@@ -2,6 +2,7 @@
 load("rda/covid_us_sum.rda")
 load("rda/covid_us_growth.rda")
 load("rda/theme_DataStache.rda")
+options(scipen = 999)
 
 
 #### US DAILY GRAPHS ####
