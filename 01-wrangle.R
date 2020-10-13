@@ -114,7 +114,9 @@ group_by(date) %>%
 save(covid_us_sum, file = "rda/covid_us_sum.rda")
 
 covid_us_growth <- covid_us_sum %>%
-  filter(date >= ind_wk) %>%
+  filter(date >= ind_2w) %>%
+  mutate(weeks = ifelse(date >= ind_wk, "Last 7 Days", "Two Weeks Ago")) %>%
+  group_by(weeks) %>%
   summarize(sum_new_cases = sum(new_cases),
             sum_new_tests = sum(new_tests),
             mean_percent_pos = mean(percent_pos, na.rm = TRUE),

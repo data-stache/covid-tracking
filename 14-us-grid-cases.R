@@ -15,8 +15,8 @@ mask_colors <- c("orangered3", "forestgreen")
 
 p_ALL_states_new_cases_plot <- covid_grid_cases %>%
   mutate(masks = ifelse(mask_law == "YES", "Yes Mask", "No Mask")) %>%
-  ggplot(aes(date, new_cases_percap, color = masks)) +
-  geom_bar(stat = "identity", fill="blue", alpha = .15, size = .1) +
+  ggplot(aes(date, new_cases_percap, color = masks, fill = masks)) +
+  geom_bar(stat = "identity", alpha = .15, size = .1) +
   scale_color_manual(values = mask_colors) +
   geom_line(aes(date, y = new_cases_percap_07da), size = .5) +
   xlab("Date") +

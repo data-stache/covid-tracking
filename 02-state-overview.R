@@ -1,5 +1,5 @@
 # PICK A STATE
-st <- "FL"
+st <- "DE"
 
 # DAILY LOOKUP TOTAL
 load("rda/covid.rda")
