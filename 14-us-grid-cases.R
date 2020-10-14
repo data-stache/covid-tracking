@@ -15,6 +15,7 @@ p_ALL_states_new_cases_plot <- covid_grid_cases %>%
   mutate(masks = ifelse(mask_law == "NO", "No Mask", "Yes Mask"),
          masks = factor(masks, levels = c("Yes Mask", "No Mask"))) %>%
   ggplot(aes(date, new_cases_percap, fill = masks)) +
+  geom_hline(yintercept=0, col = "grey40", size = .25) +
   geom_bar(stat = "identity", alpha = .3, size = .1) +
   scale_color_fivethirtyeight() +
   scale_fill_fivethirtyeight() +
