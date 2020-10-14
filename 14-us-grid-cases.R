@@ -14,11 +14,11 @@ covid_grid_cases$state <- factor(covid_grid_cases$state, levels = new_case_order
 p_ALL_states_new_cases_plot <- covid_grid_cases %>%
   mutate(masks = ifelse(mask_law == "NO", "No Mask", "Yes Mask"),
          masks = factor(masks, levels = c("Yes Mask", "No Mask"))) %>%
-  ggplot(aes(date, new_cases_percap, color = masks, fill = masks)) +
+  ggplot(aes(date, new_cases_percap, fill = masks)) +
   geom_bar(stat = "identity", alpha = .3, size = .1) +
   scale_color_fivethirtyeight() +
   scale_fill_fivethirtyeight() +
-  geom_line(aes(date, y = new_cases_percap_07da), size = .5) +
+  geom_line(aes(date, y = new_cases_percap_07da, color = masks), size = .5) +
   xlab("Date") +
   ylab("New Cases Per 100k") +
   ggtitle("New Cases Per Capita",

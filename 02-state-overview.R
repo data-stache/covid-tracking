@@ -1,12 +1,12 @@
-# PICK A STATE
-st <- "DE"
-
 # DAILY LOOKUP TOTAL
 load("rda/covid.rda")
 load("rda/ind_tywm_date.rda")
 load("rda/covid_state_growth.rda")
 load("rda/covid_state_zones.rda")
 options(digits = 3)
+
+# PICK A STATE
+st <- "FL"
 
 covid %>%
   select(date, state, new_cases, new_tests, percent_pos, new_death) %>%
