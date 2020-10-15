@@ -30,7 +30,6 @@ p_line_covid <- covid %>%
   ggplot() +
   geom_line(aes(x = date, y = new_cases_percap_07da, group = state), color = "dark blue", 
             show.legend = FALSE, size = .3) +
-  geom_line(mapping = aes(date, us_rate), data = avg, size = .2, col = "dark red") +
   ggtitle("States Hit Hardest by the Pandemic",
           subtitle = "States That Have Had a 7 Day Average of Greater than 40 New Cases per Day Per 100k") +
   labs(caption = "Created by Andrew F. Griffin\nCovid Data from The Covid Tracking Project") +

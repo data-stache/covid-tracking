@@ -29,10 +29,10 @@ p_ALL_states_new_deaths_plot <- covid_grid_death %>%
   labs(caption = "Created by Andrew F. Griffin, Covid Data from The Covid Tracking Project") +
   scale_x_date(date_labels = "%b", breaks= "1 month") +
   ylim(0,2) +
-  coord_cartesian(xlim = ind_xlim_3m) +
+  coord_cartesian(xlim = ind_xlim_3m, ylim = c(0,1.5)) +
   theme_DataStache() +
   theme(axis.text.x = element_text(angle=90, hjust = 1)) +
-  facet_wrap(. ~ state) +
+  facet_wrap(. ~ state, strip.position="bottom") +
   theme(strip.text.x = element_text(size = rel(.8),
                                     face = "bold",
                                     margin = margin(rel(.5), rel(1), rel(.5), rel(1))))

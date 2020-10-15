@@ -30,7 +30,7 @@ p_ALL_states_new_cases_plot <- covid_grid_cases %>%
   geom_hline(yintercept=0, col = "grey40", size = .4) +
   theme_DataStache() +
   theme(axis.text.x = element_text(angle=90, hjust = 1)) +
-  facet_wrap(. ~ state) +
+  facet_wrap(. ~ state, strip.position="bottom") +
   theme(strip.text.x = element_text(size = rel(.8),
                                     face = "bold",
                                     margin = margin(rel(.5), rel(1), rel(.5), rel(1))))

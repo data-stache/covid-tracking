@@ -25,7 +25,6 @@ covid %>%
   ggplot() +
   geom_line(aes(x = date, y = new_cases_percap_07da, group = state), color = "dark blue", 
             show.legend = FALSE, size = .3) +
-  geom_line(mapping = aes(date, us_rate), data = avg, size = .2, col = "dark red") +
   ggtitle("Where is Covid Hitting The Hardest?",
           subtitle = "States where both New Cases & Percent Positive are in the Red Zone") +
   labs(caption = "Created by Andrew F. Griffin\nCovid Data from The Covid Tracking Project") +
@@ -67,7 +66,6 @@ covid %>%
   ggplot() +
   geom_line(aes(x = date, y = new_cases_percap_07da, group = state), color = "dark blue", 
             show.legend = FALSE, size = .3) +
-  geom_line(mapping = aes(date, us_rate), data = avg, size = .2, col = "dark red") +
   ggtitle("Where Are Covid Cases Rising the Most?",
           subtitle = "States With Greater than 100 New Cases per Week per 100k People") +
   labs(caption = "Created by Andrew F. Griffin\nCovid Data from The Covid Tracking Project") +
