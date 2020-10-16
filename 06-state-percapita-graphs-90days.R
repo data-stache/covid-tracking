@@ -6,7 +6,7 @@ load("rda/theme_DataStache.rda")
 options(digits = 3)
 
 ## Pick State (ABB)
-st <- "FL"
+st <- "CA"
 state <- populations %>% filter(state == st) %>% pull(state_name)
 
 ##### PLOT CHARTS
@@ -14,7 +14,6 @@ state <- populations %>% filter(state == st) %>% pull(state_name)
 p_new_case <- covid %>%
   filter(state == st) %>%
   ggplot(aes(date, new_cases_percap)) +
-  geom_vline(xintercept = ymd(20200925), color = "grey50", size = .2) +
   geom_bar(stat = "identity", fill="blue", alpha = .3, size = .1) +
   scale_color_manual(values="light grey") +
   geom_line(aes(y = new_cases_percap_07da), size = .25, col="blue") +
