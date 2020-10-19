@@ -208,3 +208,6 @@ ind_red_cases <- covid_state_zones %>%
   .$state
 save(ind_red_cases, file = "rda/ind_red_cases.rda")
 
+# COVID TACKING PROJECT DATA LAST UPDATED
+ind_tdy
+
