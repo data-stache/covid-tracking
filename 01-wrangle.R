@@ -122,8 +122,8 @@ covid_us_sum <- covid_us_sum[, c(1, 10, 2:9)]
 save(covid_us_sum, file = "rda/covid_us_sum.rda")
 
 covid_us_growth <- covid_us_sum %>%
-  filter(date >= ind_2w) %>%
-  mutate(weeks = ifelse(date >= ind_wk, "Last 7 Days", "Two Weeks Ago")) %>%
+  filter(date > ind_2w) %>%
+  mutate(weeks = ifelse(date > ind_wk, "Last 7 Days", "Two Weeks Ago")) %>%
   group_by(weeks) %>%
   summarize(sum_new_cases = sum(new_cases),
             sum_new_tests = sum(new_tests),
@@ -137,7 +137,7 @@ save(covid_us_growth, file = "rda/covid_us_growth.rda")
 
 # SUMMARISE NEW CASES, TESTS, DEATHS
 covid_state_growth <- covid %>%
-  filter(date >= ind_wk) %>%
+  filter(date > ind_wk) %>%
   group_by(state, state_name) %>%
   summarize(sum_cases_percap = sum(new_cases_percap),
             sum_tests_percap = sum(new_tests_percap),
@@ -187,7 +187,7 @@ fct_cases_zone <- function(x) {
 
 # ZONE DATA FRAME
 covid_state_zones <- covid %>%
-  filter(date >= ind_wk) %>%
+  filter(date > ind_wk) %>%
   group_by(state) %>%
   summarize(sum_cases_percap = sum(new_cases_percap),
             percent_pos = mean(percent_pos, na.rm = TRUE),
