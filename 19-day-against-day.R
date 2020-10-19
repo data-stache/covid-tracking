@@ -118,7 +118,7 @@ Day <- covid_us_sum$day[1]
 # CASES
 covid_us_sum %>%
   filter(day == day[1]) %>%
-  filter(date >= ymd(20200901)) %>%
+  filter(date >= ymd(20200801)) %>%
   ggplot(aes(x = as.factor(date), y = new_cases)) +
   geom_hline(yintercept = 0, size = .2, color = "grey40") +
   geom_line(group=1, color = "dark blue", size = .3) +
@@ -126,12 +126,13 @@ covid_us_sum %>%
   coord_cartesian(ylim = c(0, NA)) +
   ggtitle(paste("United States New Cases Compared to other", Day)) +
   labs(caption = "Created by Andrew F. Griffin\nData from the Covid Tracking Project") +
-  theme_DataStache()
+  theme_DataStache() +
+  theme(axis.text.x = element_text(angle = 90))
 
 # DEATHS
 covid_us_sum %>%
   filter(day == day[1]) %>%
-  filter(date >= ymd(20200901)) %>%
+  filter(date >= ymd(20200801)) %>%
   ggplot(aes(x = as.factor(date), y = new_death)) +
   geom_hline(yintercept = 0, size = .2, color = "grey40") +
   geom_line(group=1, color = "dark blue", size = .3) +
@@ -139,12 +140,13 @@ covid_us_sum %>%
   coord_cartesian(ylim = c(0, NA)) +
   ggtitle(paste("United States New Deaths Compared to other", Day)) +
   labs(caption = "Created by Andrew F. Griffin\nData from the Covid Tracking Project") +
-  theme_DataStache()
+  theme_DataStache()+
+  theme(axis.text.x = element_text(angle = 90))
 
 # TESTS
 covid_us_sum %>%
   filter(day == day[1]) %>%
-  filter(date >= ymd(20200901)) %>%
+  filter(date >= ymd(20200801)) %>%
   ggplot(aes(x = as.factor(date), y = new_tests)) +
   geom_hline(yintercept = 0, size = .2, color = "grey40") +
   geom_line(group=1, color = "dark blue", size = .3) +
@@ -152,12 +154,13 @@ covid_us_sum %>%
   coord_cartesian(ylim = c(0, NA)) +
   ggtitle(paste("United States New Tests Compared to other", Day)) +
   labs(caption = "Created by Andrew F. Griffin\nData from the Covid Tracking Project") +
-  theme_DataStache()
+  theme_DataStache() +
+  theme(axis.text.x = element_text(angle = 90))
 
 # POSITIVE
 covid_us_sum %>%
   filter(day == day[1]) %>%
-  filter(date >= ymd(20200901)) %>%
+  filter(date >= ymd(20200801)) %>%
   ggplot(aes(x = as.factor(date), y = percent_pos)) +
   geom_hline(yintercept = 0, size = .2, color = "grey40") +
   geom_line(group=1, color = "dark blue", size = .3) +
@@ -165,5 +168,6 @@ covid_us_sum %>%
   coord_cartesian(ylim = c(0, NA)) +
   ggtitle(paste("United States Percent Positive Compared to other", Day)) +
   labs(caption = "Created by Andrew F. Griffin\nData from the Covid Tracking Project") +
-  theme_DataStache()
+  theme_DataStache() +
+  theme(axis.text.x = element_text(angle = 90))
 
