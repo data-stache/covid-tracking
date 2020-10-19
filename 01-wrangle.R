@@ -39,6 +39,8 @@ covid <- covid %>%
          new_death_percap = new_death / pop * 100000,
          # FORMAT DATE
          date = ymd(date)) %>%
+  # ADD DAY OF THE WEEK
+  mutate(day = weekdays(date)) %>%
   # ARRANGE BY DATE (MOST RECENT -> OLDEST)
   arrange(desc(date))
 
@@ -57,7 +59,11 @@ covid <- covid %>%
 # MASK LAW?
 covid <- merge(covid, masks, by = "state") %>%
   arrange(desc(date))
+
+# REORDER FOR DAY OF THE WEEK
+covid <- covid[, c(1:2, 12, 3:11, 13:21)]
 save(covid, file = "rda/covid.rda")
+
 
 
 ##### BUILD DATE INDEX #####
@@ -110,7 +116,9 @@ group_by(date) %>%
   mutate(new_cases_07da = rollapply(new_cases, width = 7, FUN=function(x) mean(x, na.rm=TRUE), by=1, by.column=TRUE, partial=TRUE, fill=NA, align="left"),
          new_tests_07da = rollapply(new_tests, width = 7, FUN=function(x) mean(x, na.rm=TRUE), by=1, by.column=TRUE, partial=TRUE, fill=NA, align="left"),
          percent_pos_07da = rollapply(percent_pos, width = 7, FUN=function(x) mean(x, na.rm=TRUE), by=1, by.column=TRUE, partial=TRUE, fill=NA, align="left"),
-         new_death_07da = rollapply(new_death, width = 7, FUN=function(x) mean(x, na.rm=TRUE), by=1, by.column=TRUE, partial=TRUE, fill=NA, align="left"))
+         new_death_07da = rollapply(new_death, width = 7, FUN=function(x) mean(x, na.rm=TRUE), by=1, by.column=TRUE, partial=TRUE, fill=NA, align="left"),
+         day = weekdays(date))
+covid_us_sum <- covid_us_sum[, c(1, 10, 2:9)]
 save(covid_us_sum, file = "rda/covid_us_sum.rda")
 
 covid_us_growth <- covid_us_sum %>%
@@ -199,3 +207,4 @@ ind_red_cases <- covid_state_zones %>%
   filter(cases_zone == "red") %>%
   .$state
 save(ind_red_cases, file = "rda/ind_red_cases.rda")
+
