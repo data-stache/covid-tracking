@@ -3,7 +3,8 @@ load("rda/covid_state_growth.rda")
 load("rda/covid_state_zones.rda")
 
 covid_state_table <- covid_state_growth %>%
-  left_join(covid_state_zones)
+  left_join(covid_state_zones) %>%
+  arrange(desc(sum_cases_percap))
 
 covid_state_table %>% head
 
