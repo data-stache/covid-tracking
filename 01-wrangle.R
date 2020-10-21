@@ -118,8 +118,8 @@ group_by(date) %>%
             new_tests = sum(new_tests),
             percent_pos = round(new_cases / new_tests, 3),
             new_death = sum(new_death),
-            cur_hosp = sum(hosp),
-            new_hosp = sum(new_hosp)) %>%
+            cur_hosp = sum(hosp, na.rm = TRUE),
+            new_hosp = sum(new_hosp, na.rm = TRUE)) %>%
   # ARRANGE BY DATE (MOST RECENT -> OLDEST)
   arrange(desc(date)) %>%
   # ADD 7 DAY AVERAGES
@@ -142,7 +142,7 @@ covid_us_growth <- covid_us_sum %>%
             sum_new_tests = sum(new_tests),
             mean_percent_pos = mean(percent_pos, na.rm = TRUE),
             sum_new_death = sum(new_death),
-            sum_new_hosp = sum(new_hosp)) %>%
+            sum_new_hosp = sum(new_hosp, na.rm = TRUE)) %>%
   ungroup()
 save(covid_us_growth, file = "rda/covid_us_growth.rda")
 
@@ -157,7 +157,7 @@ covid_state_growth <- covid %>%
             sum_tests_percap = sum(new_tests_percap),
             percent_pos = mean(percent_pos, na.rm = TRUE),
             sum_death_percap = sum(new_death_percap),
-            sum_new_hosp = sum(new_hosp)) %>%
+            sum_new_hosp = sum(new_hosp, na.rm = TRUE)) %>%
   ungroup()
 save(covid_state_growth, file = "rda/covid_state_growth.rda")
 
