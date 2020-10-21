@@ -17,8 +17,6 @@ p_new_case <- covid %>%
   geom_bar(stat = "identity", fill="blue", alpha = .3, size = .1) +
   scale_color_manual(values="light grey") +
   geom_line(aes(y = new_cases_percap_07da), size = .25, col="blue") +
-  xlab("Date") +
-  ylab("New Cases") +
   ggtitle(paste(state, sep = " ", "New Cases Per 100k People")) +
   labs(caption = "Created by Andrew F. Griffin\nCovid Data from The Covid Tracking Project") +
   scale_x_date(date_labels = "%b", breaks= "1 month") +
@@ -35,8 +33,6 @@ p_new_test <- covid %>%
   geom_bar(stat = "identity", fill="dark green", alpha = .3, size = .1) +
   scale_color_manual(values="light grey") +
   geom_line(aes(y = new_tests_percap_07da), size = .25, col="dark green") +
-  xlab("Date") +
-  ylab("New Tests") +
   ggtitle(paste(state, sep = " ", "New Tests Per 100k People")) +
   labs(caption = "Created by Andrew F. Griffin\nCovid Data from The Covid Tracking Project") +
   scale_x_date(date_labels = "%b", breaks= "1 month") +
@@ -53,8 +49,6 @@ p_new_deaths <- covid %>%
   geom_bar(stat = "identity", fill="dark red", alpha = .3, size = .1) +
   scale_color_manual(values="light grey") +
   geom_line(aes(y = new_death_percap_07da), size = .25, col="dark red") +
-  xlab("Date") +
-  ylab("New Deaths") +
   ggtitle(paste(state, sep = " ", "New Deaths Per 100k People")) +
   labs(caption = "Created by Andrew F. Griffin\nCovid Data from The Covid Tracking Project") +
   scale_x_date(date_labels = "%b", breaks= "1 month") +
@@ -64,6 +58,7 @@ p_new_deaths <- covid %>%
   theme_DataStache() +
   theme(text = element_text(size = rel(.6)))
 
+# PERCENT POSITIVE
 p_percent_pos <- covid %>%
   filter(state == st) %>%
   mutate(percent_pos = percent_pos * 100,
@@ -72,8 +67,6 @@ p_percent_pos <- covid %>%
   geom_bar(stat = "identity", fill="deepskyblue4", alpha = .3, size = .1) +
   scale_color_manual(values="light grey") +
   geom_line(aes(y = percent_pos_07da), size = .25, col="deepskyblue4") +
-  xlab("Date") +
-  ylab("New Deaths Per 100k") +
   ggtitle(paste(state, sep = " ", "Percent Positive")) +
   labs(caption = "Created by Andrew F. Griffin\nCovid Data from The Covid Tracking Project") +
   scale_x_date(date_labels = "%b", breaks= "1 month") +
@@ -83,14 +76,46 @@ p_percent_pos <- covid %>%
   theme_DataStache() +
   theme(text = element_text(size = rel(.6)))
 
+# HOSPITALIZATION
+p_hosp <- covid %>%
+  filter(state == st) %>%
+  ggplot(aes(date, hosp_percap)) +
+  geom_bar(stat = "identity", fill="orange4", alpha = .3, size = .1) +
+  scale_color_manual(values="light grey") +
+  geom_line(aes(y = hosp_percap_07da), size = .25, col="orange4") +
+  ggtitle(paste(state, sep = " ", "Hospitalization")) +
+  labs(caption = "Created by Andrew F. Griffin\nCovid Data from The Covid Tracking Project") +
+  scale_x_date(date_labels = "%b", breaks= "1 month") +
+  scale_y_continuous(expand = c(0,0)) +
+  coord_cartesian(xlim = ind_xlim_3m) +
+  geom_hline(yintercept=0, col = "grey40", size = .4) +
+  theme_DataStache() +
+  theme(text = element_text(size = rel(.6)))
+
+# NEW HOSPITALIZATION
+p_new_hosp <- covid %>%
+  filter(state == st) %>%
+  ggplot(aes(date, new_hosp_percap)) +
+  geom_bar(stat = "identity", fill="orange4", alpha = .3, size = .1) +
+  scale_color_manual(values="light grey") +
+  geom_line(aes(y = new_hosp_percap_07da), size = .25, col="orange4") +
+  ggtitle(paste(state, sep = " ", "New Hospitalization")) +
+  labs(caption = "Created by Andrew F. Griffin\nCovid Data from The Covid Tracking Project") +
+  scale_x_date(date_labels = "%b", breaks= "1 month") +
+  scale_y_continuous(expand = c(0,0)) +
+  coord_cartesian(xlim = ind_xlim_3m) +
+  geom_hline(yintercept=0, col = "grey40", size = .2) +
+  theme_DataStache() +
+  theme(text = element_text(size = rel(.6)))
+
 # GRID ARRANGE PLOTS
-grid.arrange(p_new_case, p_percent_pos, p_new_test, p_new_deaths, nrow = 2)
+grid.arrange(p_new_case, p_new_test, p_hosp, p_new_deaths, p_percent_pos, p_new_hosp, nrow = 2)
 
 p_width <- 6
 p_height <- (9/16) * p_width  
 
 # GRID PRINT PLOTS
-G <- arrangeGrob(p_new_case, p_percent_pos, p_new_test, p_new_deaths, nrow = 2)
+G <- arrangeGrob(p_new_case, p_new_test, p_hosp, p_new_deaths, p_percent_pos, p_new_hosp, nrow = 2)
 ggsave(paste("figs/", state, sep = " ", "Per Capita 90 days.png"),
        G,
        width = p_width,
