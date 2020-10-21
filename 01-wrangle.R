@@ -29,7 +29,8 @@ covid <- data.frame(date = covid$date,
                     pop = covid$population,
                     new_cases = covid$positiveIncrease, 
                     new_tests = covid$totalTestResultsIncrease, 
-                    new_death = covid$deathIncrease)
+                    new_death = covid$deathIncrease,
+                    hosp = covid$hospitalizedCurrently)
 
 # PER 100K
 covid <- covid %>%
@@ -37,6 +38,7 @@ covid <- covid %>%
          new_cases_percap = new_cases / pop * 100000,
          new_tests_percap = new_tests / pop * 100000,
          new_death_percap = new_death / pop * 100000,
+         hosp_percap = hosp / pop *100000,
          # FORMAT DATE
          date = ymd(date)) %>%
   # ADD DAY OF THE WEEK
@@ -47,12 +49,18 @@ covid <- covid %>%
 # 7 DAY ROLLING AVERAGE
 covid <- covid %>%
   group_by(state) %>% 
-  mutate(new_cases_07da = rollapply(new_cases, width = 7, FUN=function(x) mean(x, na.rm=TRUE), by=1, by.column=TRUE, partial=TRUE, fill=NA, align="left"),
+  mutate(new_hosp = hosp - lag(hosp, n = 1, order_by = date),
+         new_hosp_percap = hosp_percap - lag(hosp_percap, n = 1, order_by = date),
+         new_cases_07da = rollapply(new_cases, width = 7, FUN=function(x) mean(x, na.rm=TRUE), by=1, by.column=TRUE, partial=TRUE, fill=NA, align="left"),
          new_tests_07da = rollapply(new_tests, width = 7, FUN=function(x) mean(x, na.rm=TRUE), by=1, by.column=TRUE, partial=TRUE, fill=NA, align="left"),
          new_death_07da = rollapply(new_death, width = 7, FUN=function(x) mean(x, na.rm=TRUE), by=1, by.column=TRUE, partial=TRUE, fill=NA, align="left"),
+         hosp_07da = rollapply(hosp, width = 7, FUN=function(x) mean(x, na.rm=TRUE), by=1, by.column=TRUE, partial=TRUE, fill=NA, align="left"),
+         new_hosp_07da = rollapply(new_hosp, width = 7, FUN=function(x) mean(x, na.rm=TRUE), by=1, by.column=TRUE, partial=TRUE, fill=NA, align="left"),
          new_cases_percap_07da = rollapply(new_cases_percap, width = 7, FUN=function(x) mean(x, na.rm=TRUE), by=1, by.column=TRUE, partial=TRUE, fill=NA, align="left"),
          new_tests_percap_07da = rollapply(new_tests_percap , width = 7, FUN=function(x) mean(x, na.rm=TRUE), by=1, by.column=TRUE, partial=TRUE, fill=NA, align="left"),
          new_death_percap_07da = rollapply(new_death_percap, width = 7, FUN=function(x) mean(x, na.rm=TRUE), by=1, by.column=TRUE, partial=TRUE, fill=NA, align="left"),
+         hosp_percap_07da = rollapply(hosp_percap, width = 7, FUN=function(x) mean(x, na.rm=TRUE), by=1, by.column=TRUE, partial=TRUE, fill=NA, align="left"),
+         new_hosp_percap_07da = rollapply(new_hosp_percap, width = 7, FUN=function(x) mean(x, na.rm=TRUE), by=1, by.column=TRUE, partial=TRUE, fill=NA, align="left"),
          percent_pos_07da = rollapply(percent_pos, width = 7, FUN=function(x) mean(x, na.rm=TRUE), by=1, by.column=TRUE, partial=TRUE, fill=NA, align="left")) %>% 
   ungroup()
 
@@ -61,7 +69,7 @@ covid <- merge(covid, masks, by = "state") %>%
   arrange(desc(date))
 
 # REORDER FOR DAY OF THE WEEK
-covid <- covid[, c(1:2, 12, 3:11, 13:21)]
+covid <- covid[, c(1:2, 14, 3:13, 15:29)]
 save(covid, file = "rda/covid.rda")
 
 
@@ -109,7 +117,9 @@ group_by(date) %>%
   summarise(new_cases = sum(new_cases),
             new_tests = sum(new_tests),
             percent_pos = round(new_cases / new_tests, 3),
-            new_death = sum(new_death)) %>%
+            new_death = sum(new_death),
+            cur_hosp = sum(hosp),
+            new_hosp = sum(new_hosp)) %>%
   # ARRANGE BY DATE (MOST RECENT -> OLDEST)
   arrange(desc(date)) %>%
   # ADD 7 DAY AVERAGES
@@ -117,8 +127,11 @@ group_by(date) %>%
          new_tests_07da = rollapply(new_tests, width = 7, FUN=function(x) mean(x, na.rm=TRUE), by=1, by.column=TRUE, partial=TRUE, fill=NA, align="left"),
          percent_pos_07da = rollapply(percent_pos, width = 7, FUN=function(x) mean(x, na.rm=TRUE), by=1, by.column=TRUE, partial=TRUE, fill=NA, align="left"),
          new_death_07da = rollapply(new_death, width = 7, FUN=function(x) mean(x, na.rm=TRUE), by=1, by.column=TRUE, partial=TRUE, fill=NA, align="left"),
-         day = weekdays(date))
-covid_us_sum <- covid_us_sum[, c(1, 10, 2:9)]
+         cur_hosp_07da = rollapply(cur_hosp, width = 7, FUN=function(x) mean(x, na.rm=TRUE), by=1, by.column=TRUE, partial=TRUE, fill=NA, align="left"),
+         new_hosp_07da = rollapply(new_hosp, width = 7, FUN=function(x) mean(x, na.rm=TRUE), by=1, by.column=TRUE, partial=TRUE, fill=NA, align="left"),
+         day = weekdays(date)) %>%
+  ungroup()
+covid_us_sum <- covid_us_sum[, c(1, 14, 2:13)]
 save(covid_us_sum, file = "rda/covid_us_sum.rda")
 
 covid_us_growth <- covid_us_sum %>%
@@ -128,7 +141,8 @@ covid_us_growth <- covid_us_sum %>%
   summarize(sum_new_cases = sum(new_cases),
             sum_new_tests = sum(new_tests),
             mean_percent_pos = mean(percent_pos, na.rm = TRUE),
-            sum_new_death = sum(new_death)) %>%
+            sum_new_death = sum(new_death),
+            sum_new_hosp = sum(new_hosp)) %>%
   ungroup()
 save(covid_us_growth, file = "rda/covid_us_growth.rda")
 
@@ -142,7 +156,8 @@ covid_state_growth <- covid %>%
   summarize(sum_cases_percap = sum(new_cases_percap),
             sum_tests_percap = sum(new_tests_percap),
             percent_pos = mean(percent_pos, na.rm = TRUE),
-            sum_death_percap = sum(new_death_percap)) %>%
+            sum_death_percap = sum(new_death_percap),
+            sum_new_hosp = sum(new_hosp)) %>%
   ungroup()
 save(covid_state_growth, file = "rda/covid_state_growth.rda")
 

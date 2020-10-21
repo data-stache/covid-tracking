@@ -26,7 +26,7 @@ p_ALL_states_new_cases_plot <- covid_grid_cases %>%
           subtitle = "Ordered from most to least new cases per capita in the last 7 days") +
   labs(caption = "Created by Andrew F. Griffin, Covid Data from The Covid Tracking Project") +
   scale_x_date(date_labels = "%b", breaks= "1 month") +
-  coord_cartesian(xlim = ind_xlim_3m, ylim = c(0, 80)) +
+  coord_cartesian(xlim = ind_xlim_3m, ylim = c(0, 100)) +
   geom_hline(yintercept=0, col = "grey40", size = .4) +
   theme_DataStache() +
   theme(axis.text.x = element_text(angle=90, hjust = 1)) +

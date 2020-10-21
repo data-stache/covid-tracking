@@ -3,20 +3,6 @@ load("rda/covid_us_sum.rda")
 load("rda/theme_DataStache.rda")
 
 ##### CASES DAY OF THE WEEK #####
-# New Cases Day of Week over Time
-covid_us_sum %>%
-  mutate(week = epiweek(date),
-         day = factor(day, levels = c("Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"))) %>% 
-  group_by(week) %>%
-  mutate(weeks = min(date)) %>%
-  filter(date >= ymd(20200901)) %>%
-  ggplot(aes(x = day, y = new_cases, group = weeks)) +
-  geom_col(aes(fill = factor(weeks)), position = "dodge") +
-  scale_fill_brewer(palette = "Dark2") +
-  labs(fill = "Week Begining") +
-  theme_DataStache() +
-  theme(legend.position = "right")
-
 # Box Plot of New Cases Day of Week over Time
 covid_us_sum %>%
   mutate(week = epiweek(date),
@@ -30,20 +16,6 @@ covid_us_sum %>%
   theme_DataStache()
 
 ##### DEATHS DAY OF THE WEEK #####
-# New Deaths Day of Week over Time
-covid_us_sum %>%
-  mutate(week = epiweek(date),
-         day = factor(day, levels = c("Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"))) %>% 
-  group_by(week) %>%
-  mutate(weeks = min(date)) %>%
-  filter(date >= ymd(20200901)) %>%
-  ggplot(aes(x = day, y = new_death, group = weeks)) +
-  geom_col(aes(fill = factor(weeks)), position = "dodge") +
-  scale_fill_brewer(palette = "Dark2") +
-  labs(fill = "Week Begining") +
-  theme_DataStache() +
-  theme(legend.position = "right")
-
 # Box Plot of New Deaths Day of Week over Time
 covid_us_sum %>%
   mutate(week = epiweek(date),
@@ -58,20 +30,6 @@ covid_us_sum %>%
 
 
 ##### TESTS DAY OF THE WEEK #####
-# New Tests Day of Week over Time
-covid_us_sum %>%
-  mutate(week = epiweek(date),
-         day = factor(day, levels = c("Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"))) %>% 
-  group_by(week) %>%
-  mutate(weeks = min(date)) %>%
-  filter(date >= ymd(20200901)) %>%
-  ggplot(aes(x = day, y = new_tests, group = weeks)) +
-  geom_col(aes(fill = factor(weeks)), position = "dodge") +
-  scale_fill_brewer(palette = "Dark2") +
-  labs(fill = "Week Begining") +
-  theme_DataStache() +
-  theme(legend.position = "right")
-
 # Box Plot of New Tests Day of Week over Time
 covid_us_sum %>%
   mutate(week = epiweek(date),
@@ -86,20 +44,6 @@ covid_us_sum %>%
 
 
 ##### POSITIVE DAY OF THE WEEK #####
-# New Deaths Day of Week over Time
-covid_us_sum %>%
-  mutate(week = epiweek(date),
-         day = factor(day, levels = c("Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"))) %>% 
-  group_by(week) %>%
-  mutate(weeks = min(date)) %>%
-  filter(date >= ymd(20200901)) %>%
-  ggplot(aes(x = day, y = percent_pos, group = weeks)) +
-  geom_col(aes(fill = factor(weeks)), position = "dodge") +
-  scale_fill_brewer(palette = "Dark2") +
-  labs(fill = "Week Begining") +
-  theme_DataStache() +
-  theme(legend.position = "right")
-
 # Box Plot of New Deaths Day of Week over Time
 covid_us_sum %>%
   mutate(week = epiweek(date),
