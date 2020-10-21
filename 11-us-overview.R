@@ -12,7 +12,7 @@ length(ind_red_perpos)
 length(ind_red_cases)
 
 covid_us_sum %>%
-  select(date, new_cases, new_tests, percent_pos, new_death) %>%
+  select(date, new_cases, new_tests, percent_pos, new_death, new_hosp) %>%
   filter(date %in% ind_tywm_date)
 
 covid_us_growth

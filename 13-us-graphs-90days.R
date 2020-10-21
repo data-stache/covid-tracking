@@ -55,10 +55,27 @@ p_US_new_deaths_plot <- covid_us_sum %>%
   theme_DataStache() +
   theme(text = element_text(size = rel(.6)))
 
-grid.arrange(p_US_new_case_plot, p_US_new_test_plot, p_US_new_deaths_plot, nrow=1)
+p_US_hosp <- covid_us_sum %>%
+  ggplot(aes(date, cur_hosp)) +
+  geom_hline(yintercept=0, col = "grey40", size = .2) +
+  geom_bar(stat = "identity", fill="orange3", alpha = .3, size = .1) +
+  scale_color_manual(values="light grey") +
+  geom_line(aes(y = cur_hosp_07da), size = .35, col="orange3") +
+  xlab("Date") +
+  ylab("Percent Positive") +
+  ggtitle("US Hospitalization",
+          subtitle = "Past 90 Days") +
+  labs(caption = "Created by Andrew F. Griffin\nCovid Data from The Covid Tracking Project") +
+  scale_x_date(date_labels = "%b", breaks= "1 month", expand = c(0,0)) +
+  coord_cartesian(xlim = ind_xlim_3m, ylim = c(0,NA)) +
+  scale_y_continuous(expand = c(0,0)) +
+  theme_DataStache() +
+  theme(text = element_text(size = rel(.6)))
+
+grid.arrange(p_US_new_case_plot, p_US_new_test_plot, p_US_new_deaths_plot, p_US_hosp, nrow=1)
 
 # GRID PRINT PLOTS
-G <- arrangeGrob(p_US_new_case_plot, p_US_new_test_plot, p_US_new_deaths_plot, nrow=1)
+G <- arrangeGrob(p_US_new_case_plot, p_US_new_test_plot, p_US_new_deaths_plot, p_US_hosp, nrow=1)
 
 p_width <- 6
 p_height <- (9/16) * p_width  
