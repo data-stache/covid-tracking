@@ -72,10 +72,42 @@ p_US_percent_pos <- covid_us_sum %>%
   theme_DataStache() +
   theme(text = element_text(size = rel(.6)))
 
-grid.arrange(p_US_new_case_plot, p_US_new_test_plot, p_US_new_deaths_plot, p_US_percent_pos, nrow=2)
+p_US_hosp <- covid_us_sum %>%
+  ggplot(aes(date, cur_hosp)) +
+  geom_hline(yintercept=0, col = "grey40", size = .2) +
+  geom_bar(stat = "identity", fill="orange4", alpha = .3, size = .1) +
+  scale_color_manual(values="light grey") +
+  geom_line(aes(y = cur_hosp_07da), size = .35, col="orange4") +
+  xlab("Date") +
+  ylab("Percent Positive") +
+  ggtitle("US Hospitalization") +
+  labs(caption = "Created by Andrew F. Griffin\nCovid Data from The Covid Tracking Project") +
+  scale_x_date(date_labels = "%b", breaks= "1 month", expand = c(0,0)) +
+  scale_y_continuous(expand = c(0,0)) +
+  coord_cartesian(xlim = c(ymd(20200301), NA)) +
+  theme_DataStache() +
+  theme(text = element_text(size = rel(.6)))
+
+p_US_new_hosp <- covid_us_sum %>%
+  ggplot(aes(date, new_hosp)) +
+  geom_hline(yintercept=0, col = "grey40", size = .2) +
+  geom_bar(stat = "identity", fill="orange4", alpha = .3, size = .1) +
+  scale_color_manual(values="light grey") +
+  geom_line(aes(y = new_hosp_07da), size = .35, col="orange4") +
+  xlab("Date") +
+  ylab("Percent Positive") +
+  ggtitle("US New Hospitalization") +
+  labs(caption = "Created by Andrew F. Griffin\nCovid Data from The Covid Tracking Project") +
+  scale_x_date(date_labels = "%b", breaks= "1 month", expand = c(0,0)) +
+  scale_y_continuous(expand = c(0,0)) +
+  coord_cartesian(xlim = c(ymd(20200301), NA)) +
+  theme_DataStache() +
+  theme(text = element_text(size = rel(.6)))
+
+grid.arrange(p_US_new_case_plot, p_US_new_test_plot, p_US_hosp, p_US_new_deaths_plot, p_US_percent_pos, p_US_new_hosp, nrow=2)
 
 # GRID PRINT PLOTS
-G <- arrangeGrob(p_US_new_case_plot, p_US_new_test_plot, p_US_new_deaths_plot, p_US_percent_pos, nrow=2)
+G <- arrangeGrob(p_US_new_case_plot, p_US_new_test_plot, p_US_hosp, p_US_new_deaths_plot, p_US_percent_pos, p_US_new_hosp, nrow=2)
 
 p_width <- 6
 p_height <- (9/16) * p_width  

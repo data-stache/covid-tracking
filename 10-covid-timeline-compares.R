@@ -1,6 +1,7 @@
 # LOAD DATE
 load("rda/covid_us_sum.rda")
 load("rda/covid.rda")
+load("rda/ind_2w.rda")
 
 # CASES THIS HIGH
 covid_us_sum %>%
@@ -24,10 +25,10 @@ covid_us_sum %>%
   filter(percent_pos >= p) %>% select(date, percent_pos)
 
 # WORST 7 DAY CASE AVERAGES
-head(covid)
 covid %>%
   group_by(state) %>%
-  filter(new_cases_percap_07da == max(new_cases_percap_07da)) %>%
+  filter(new_cases_percap == max(new_cases_percap)) %>%
   select(state, date, new_cases_percap_07da) %>%
-  arrange(desc(new_cases_percap_07da))
+  filter(date >= ind_2w) %>%
+  arrange(desc(date))
   
