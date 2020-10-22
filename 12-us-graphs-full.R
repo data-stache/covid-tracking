@@ -18,7 +18,7 @@ p_US_new_case_plot <- covid_us_sum %>%
   labs(caption = "Created by Andrew F. Griffin\nCovid Data from The Covid Tracking Project") +
   scale_x_date(date_labels = "%b", breaks= "1 month", expand = c(0,0)) +
   scale_y_continuous(expand = c(0,0)) +
-  coord_cartesian(xlim = c(ymd(20200301), NA)) +
+  coord_cartesian(xlim = c(ymd(20200301), NA), ylim = c(0, max(covid_us_sum$new_cases_07da, na.rm = TRUE) * 1.1)) +
   theme_DataStache() +
   theme(text = element_text(size = rel(.6)))
 
@@ -34,7 +34,7 @@ p_US_new_test_plot <- covid_us_sum %>%
   labs(caption = "Created by Andrew F. Griffin\nCovid Data from The Covid Tracking Project") +
   scale_x_date(date_labels = "%b", breaks= "1 month", expand = c(0,0)) +
   scale_y_continuous(expand = c(0,0)) +
-  coord_cartesian(xlim = c(ymd(20200301), NA)) +
+  coord_cartesian(xlim = c(ymd(20200301), NA), ylim = c(0, max(covid_us_sum$new_tests_07da, na.rm = TRUE) * 1.1)) +
   theme_DataStache() +
   theme(text = element_text(size = rel(.6)))
 
@@ -50,13 +50,11 @@ p_US_new_deaths_plot <- covid_us_sum %>%
   labs(caption = "Created by Andrew F. Griffin\nCovid Data from The Covid Tracking Project") +
   scale_x_date(date_labels = "%b", breaks= "1 month", expand = c(0,0)) +
   scale_y_continuous(expand = c(0,0)) +
-  coord_cartesian(xlim = c(ymd(20200301), NA)) +
+  coord_cartesian(xlim = c(ymd(20200301), NA), ylim = c(0, max(covid_us_sum$new_death_07da, na.rm = TRUE) * 1.1)) +
   theme_DataStache() +
   theme(text = element_text(size = rel(.6)))
 
 p_US_percent_pos <- covid_us_sum %>%
-  mutate(percent_pos = percent_pos * 100,
-         percent_pos_07da = percent_pos_07da * 100) %>%
   ggplot(aes(date, percent_pos)) +
   geom_hline(yintercept=0, col = "grey40", size = .2) +
   geom_bar(stat = "identity", fill="deepskyblue4", alpha = .3, size = .1) +
@@ -67,8 +65,8 @@ p_US_percent_pos <- covid_us_sum %>%
   ggtitle("US Percent Positive") +
   labs(caption = "Created by Andrew F. Griffin\nCovid Data from The Covid Tracking Project") +
   scale_x_date(date_labels = "%b", breaks= "1 month", expand = c(0,0)) +
-  scale_y_continuous(breaks = seq(0,50,5), expand = c(0,0)) +
-  coord_cartesian(xlim = c(ymd(20200301), NA), ylim = c(0,25)) +
+  scale_y_continuous(expand = c(0,0)) +
+  coord_cartesian(xlim = c(ymd(20200301), NA), ylim = c(0, max(covid_us_sum$percent_pos_07da, na.rm = TRUE) * 1.1)) +
   theme_DataStache() +
   theme(text = element_text(size = rel(.6)))
 
@@ -84,7 +82,7 @@ p_US_hosp <- covid_us_sum %>%
   labs(caption = "Created by Andrew F. Griffin\nCovid Data from The Covid Tracking Project") +
   scale_x_date(date_labels = "%b", breaks= "1 month", expand = c(0,0)) +
   scale_y_continuous(expand = c(0,0)) +
-  coord_cartesian(xlim = c(ymd(20200301), NA)) +
+  coord_cartesian(xlim = c(ymd(20200301), NA), ylim = c(0, max(covid_us_sum$cur_hosp_07da, na.rm = TRUE) * 1.1)) +
   theme_DataStache() +
   theme(text = element_text(size = rel(.6)))
 
@@ -100,7 +98,7 @@ p_US_new_hosp <- covid_us_sum %>%
   labs(caption = "Created by Andrew F. Griffin\nCovid Data from The Covid Tracking Project") +
   scale_x_date(date_labels = "%b", breaks= "1 month", expand = c(0,0)) +
   scale_y_continuous(expand = c(0,0)) +
-  coord_cartesian(xlim = c(ymd(20200301), NA)) +
+  coord_cartesian(xlim = c(ymd(20200301), NA), ylim = c(min(covid_us_sum$new_hosp_07da, na.rm = TRUE) * 1.1, max(covid_us_sum$new_hosp_07da, na.rm = TRUE) * 1.1)) +
   theme_DataStache() +
   theme(text = element_text(size = rel(.6)))
 
