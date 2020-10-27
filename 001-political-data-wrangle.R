@@ -21,7 +21,7 @@ slpli <- slpli %>%
   # MAKE DC DEMOCRAT
   mutate(SLPLI = ifelse(is.na(SLPLI), "Democrat", SLPLI),
          # ADD PARTY ABBREVIATIONS
-         (gov_party = case_when(SLPLI == "Republican" ~ "R",
-                               SLPLI == "Democrat" ~ "D")))
+         slpli_party = case_when(SLPLI == "Republican" ~ "R",
+                               SLPLI == "Democrat" ~ "D"))
 save(slpli, file = "rda/slpli.rda")
   
