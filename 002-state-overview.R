@@ -6,7 +6,7 @@ load("rda/covid_state_zones.rda")
 options(digits = 3)
 
 # PICK A STATE
-st <- "CT"
+st <- "DE"
 
 covid %>%
   select(date, state, new_cases, new_tests, percent_pos, new_death, hosp) %>%
