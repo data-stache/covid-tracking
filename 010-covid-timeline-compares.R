@@ -20,9 +20,8 @@ covid_us_sum %>%
   filter(new_death_07da >= covid_us_sum$new_death_07da[1]) %>% select(date, new_death_07da)
 
 # % POSITIVE ABOVE ##
-p <- .06
 covid_us_sum %>%
-  filter(percent_pos >= p) %>% select(date, percent_pos)
+  filter(percent_pos >= covid_us_sum$percent_pos[1]) %>% select(date, percent_pos)
 
 # WORST 7 DAY CASE AVERAGES
 covid %>%
