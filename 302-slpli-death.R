@@ -47,8 +47,6 @@ month_death_pc %>%
   scale_x_continuous(breaks = seq(1, 12, 1)) +
   scale_fill_manual(values = pol_party)
 
-?geom_bar
-
 month_death_pc %>%
   ggplot() +
   geom_bar(aes(x = SLPLI, y = death), stat = "identity") +

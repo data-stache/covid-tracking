@@ -92,7 +92,7 @@ covid_pol %>%
   geom_hline(yintercept = 0, size = .5, col = "40grey") +
   geom_point(color = "dark blue", alpha = .5) +
   geom_smooth(method = "lm") +
-  coord_cartesian(xlim = c(-50,50), ylim = c(0,NA)) +
+  coord_cartesian(xlim = c(-50,50)) +
   theme_DataStache() +
   theme(panel.border = element_rect(colour = "black", fill=NA, size=.7)) +
   facet_wrap(. ~ month, strip.position="bottom") +
@@ -175,7 +175,7 @@ covid_pol %>%
   geom_hline(yintercept = 0, size = .5, col = "40grey") +
   geom_point(color = "dark blue", alpha = .5) +
   geom_smooth(method = "lm") +
-  coord_cartesian(xlim = c(-50,50), ylim = c(0,NA)) +
+  coord_cartesian(xlim = c(min(covid_pol$pvi) * 1.1, max(covid_pol$pvi) * 1.1), ylim = c(0,NA)) +
   theme_DataStache() +
   theme(panel.border = element_rect(colour = "black", fill=NA, size=.7)) +
   facet_wrap(. ~ month, strip.position="bottom") +
@@ -205,7 +205,7 @@ covid_pol %>%
   geom_hline(yintercept = 0, size = .5, col = "40grey") +
   geom_point(color = "dark blue", alpha = .5) +
   geom_smooth(method = "lm") +
-  coord_cartesian(xlim = c(-50,50), ylim = c(0,NA)) +
+  coord_cartesian(xlim = c(min(covid_pol$pvi) * 1.1, max(covid_pol$pvi) * 1.1), ylim = c(0,NA)) +
   theme_DataStache() +
   theme(panel.border = element_rect(colour = "black", fill=NA, size=.7)) +
   facet_wrap(. ~ month, strip.position="bottom") +
@@ -232,7 +232,7 @@ covid_pol %>%
   geom_hline(yintercept = 0, size = .5, col = "40grey") +
   geom_point(color = "dark blue", alpha = .5) +
   geom_smooth(method = "lm") +
-  coord_cartesian(xlim = c(-50,50), ylim = c(0,NA)) +
+  coord_cartesian(xlim = c(min(covid_pol$pvi) * 1.1, max(covid_pol$pvi) * 1.1), ylim = c(0,NA)) +
   theme_DataStache() +
   theme(panel.border = element_rect(colour = "black", fill=NA, size=.7)) +
   facet_wrap(. ~ month, strip.position="bottom") +
@@ -260,7 +260,7 @@ covid_pol %>%
   geom_hline(yintercept = 0, size = .5, col = "40grey") +
   geom_point(color = "dark blue", alpha = .5) +
   geom_smooth(method = "lm") +
-  coord_cartesian(xlim = c(-50,50), ylim = c(0,NA)) +
+  coord_cartesian(xlim = c(min(covid_pol$pvi) * 1.1, max(covid_pol$pvi) * 1.1), ylim = c(0,NA)) +
   theme_DataStache() +
   theme(panel.border = element_rect(colour = "black", fill=NA, size=.7)) +
   facet_wrap(. ~ month, strip.position="bottom") +
@@ -275,28 +275,6 @@ ggsave("figs/testing-correl-pvi.png",
        width = p_width,
        height = p_height, 
        dpi = "retina") 
-
-
-
-
-
-
-covid_pol_M <- covid_pol %>%
-  group_by(state) %>%
-  summarize(cases = sum(new_cases) / unique(pop) * 100000,
-            partisan = unique(party_by))
-
-covid_pol_M %>%
-  summarise(cor = cor(cases, partisan))
-
-model <- lm(cases ~ partisan, data = covid_pol_M)
-model
-
-coefs <- tidy(model, conf.int = TRUE)
-coefs
-
-
-
 
 
 # CASES PER CAPITA BY MONTH AND GOVERNOR PARTY

@@ -14,6 +14,8 @@ stations <- stations[[2]]
 al_stations <- unique(stations$station) %>%
   str_replace(.,"GHCND:", "")
 
+?ncdc
+
 weather_al <- meteo_pull_monitors(al_stations, date_min = "2020-03-01", var = c("TMIN", "TMAX"))
 
 weather_al <- weather_al %>%
