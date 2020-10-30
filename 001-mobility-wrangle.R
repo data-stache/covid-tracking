@@ -2,6 +2,10 @@ library(tidyverse)
 library(lubridate)
 library(zoo)
 
+# LAST UPDATE ?
+load("rda/mobility_update.rda")
+mobility_update
+
 # MOBILITY DATA
 url <- "https://www.gstatic.com/covid19/mobility/Global_Mobility_Report.csv"
 temp_file <- tempfile()
