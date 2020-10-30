@@ -21,14 +21,14 @@ dat <- covid %>%
   select(1:5) %>%
   filter(!is.na(tavg)) %>%
   group_by(state) %>%
-  mutate(cases = rollapply(new_cases_percap, width = 14, FUN=function(x) mean(x, na.rm=TRUE), by=1, by.column=TRUE, partial=TRUE, fill=NA, align="left"),
-         temp = rollapply(tavg, width = 14, FUN=function(x) mean(x, na.rm=TRUE), by=1, by.column=TRUE, partial=TRUE, fill=NA, align="right"))
+  mutate(cases = rollapply(new_cases_percap, width = 7, FUN=function(x) mean(x, na.rm=TRUE), by=1, by.column=TRUE, partial=TRUE, fill=NA, align="left"),
+         temp = rollapply(tavg, width = 7, FUN=function(x) mean(x, na.rm=TRUE), by=1, by.column=TRUE, partial=TRUE, fill=NA, align="right"))
 
 
 ##### REGRESSION ANALYTICS #####
 # ALL USA WHOLE PANDEMIC
 dat %>%
-  filter(date >= ymd(20200401)) %>%
+  filter(date >= ymd(20200601)) %>%
   ggplot(aes(x = temp, y = cases)) +
   geom_point(size = 1, alpha = .5) +
   geom_smooth()
@@ -61,7 +61,7 @@ coeffs %>%
 
 ##### STATE MODELS #####
 # PICK A STATE
-st <- "MD"
+st <- "CT"
 
 dat_st <- dat %>%
   filter(state %in% st)
@@ -82,7 +82,7 @@ new_temps
 
 # STRAIGHT LINEAR MODEL
 dat_st %>%
-  filter(date >= ymd(20200401)) %>%
+  filter(date >= ymd(20200301)) %>%
   ggplot(aes(x = temp, y = cases)) +
   geom_hline(yintercept = 0, col = "grey60", size = .7) +
   geom_point(size = .5, alpha = .3, col = "dark blue") +
