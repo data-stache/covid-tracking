@@ -239,6 +239,11 @@ covid_us_sum %>%
 covid_us_sum %>%
   filter(new_hosp >= covid_us_sum$new_hosp[1]) %>% select(date, new_hosp)
 ```
+
+```{r NEW HOSP 07DA THIS HIGH, warning=FALSE, echo=FALSE, message=FALSE}
+covid_us_sum %>%
+  filter(new_hosp >= covid_us_sum$new_hosp_07da[1]) %>% select(date, new_hosp_07da)
+```
 <br></br>
 ```{r WEEKLY SUMMARIES, warning=FALSE, echo=FALSE, message=FALSE}
 # LOAD DATA

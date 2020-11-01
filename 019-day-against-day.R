@@ -1,6 +1,40 @@
 # LOAD DATA
 load("rda/covid_us_sum.rda")
 load("rda/theme_DataStache.rda")
+load("rda/ind_tdy.rda")
+
+
+##### PERCENT BY DAY OF WEEK #####
+# % COUNT CASES BY DAY OF WEEK - LAST 3 MONTHS
+covid_us_sum %>%
+  filter(date >= ind_tdy - (7*12-1)) %>%
+  mutate(day = factor(day, levels = c("Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"))) %>%
+  group_by(day) %>%
+  summarize(cases_tot = sum(new_cases),
+            mean_cases = mean(new_cases),
+            cases_per = sum(new_cases) / sum(.$new_cases),
+            N = n()) %>%
+  ungroup()
+
+# % COUNT DEATHS BY DAY OF WEEK - LAST 3 MONTHS
+covid_us_sum %>%
+  filter(date >= ind_tdy - (7*12-1)) %>%
+  mutate(day = factor(day, levels = c("Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"))) %>%
+  group_by(day) %>%
+  summarize(cases_tot = sum(new_death),
+            cases_per = sum(new_death) / sum(.$new_death)) %>%
+  ungroup()
+
+# % COUNT TESTS BY DAY OF WEEK - LAST 3 MONTHS
+covid_us_sum %>%
+  filter(date >= ind_tdy - (7*12-1)) %>%
+  mutate(day = factor(day, levels = c("Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"))) %>%
+  group_by(day) %>%
+  summarize(cases_tot = sum(new_tests),
+            cases_per = sum(new_tests) / sum(.$new_tests)) %>%
+  ungroup()
+
+
 
 ##### CASES DAY OF THE WEEK #####
 # Box Plot of New Cases Day of Week over Time
@@ -143,4 +177,3 @@ covid_us_sum %>%
   labs(caption = "Created by Andrew F. Griffin\nData from the Covid Tracking Project") +
   theme_DataStache() +
   theme(axis.text.x = element_text(angle = 90))
-
