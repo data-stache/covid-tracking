@@ -1,7 +1,6 @@
 load("rda/mobility.rda")
 load("rda/weather.rda")
 load("rda/covid.rda")
-tail(mobility)
 
 # REGRESSION DF
 dat <- covid %>%
@@ -39,7 +38,7 @@ cor <- dat %>%
 cor
 
 dat %>%
-  filter(date >= ymd(20200401)) %>%
+  filter(date >= ymd(20200301)) %>%
   ggplot(aes(x = temp, y = cases)) +
   geom_point(alpha = .5) +
   geom_smooth()
