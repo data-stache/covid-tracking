@@ -189,12 +189,12 @@ covid_us_sum %>%
 
 Covid Data for `r month(covid_us_sum$date[1], label = TRUE)` `r day(covid_us_sum$date[1])`  
 New Cases  
-Tdy (`r month(covid_us_sum$date[1])`-`r day(covid_us_sum$date[1])`): `r format(covid_us_sum$new_cases[1], big.mark = ",")` `r ifelse(covid_us_sum$new_cases[1] == max(covid_us_sum$new_cases), "*", "")`  
+Tdy (`r month(covid_us_sum$date[1])`-`r day(covid_us_sum$date[1])`): `r format(covid_us_sum$new_cases[1], big.mark = ",")``r ifelse(covid_us_sum$new_cases[1] == max(covid_us_sum$new_cases), "*", "")`  
 Yest (`r month(covid_us_sum$date[2])`-`r day(covid_us_sum$date[2])`): `r format(covid_us_sum$new_cases[2], big.mark = ",")`  
 Lt Wk (`r month(covid_us_sum$date[8])`-`r day(covid_us_sum$date[8])`): `r format(covid_us_sum$new_cases[8], big.mark = ",")`  
 <br></br>
 New Tests  
-T: `r format(covid_us_sum$new_tests[1], big.mark = ",")` `r ifelse(covid_us_sum$new_tests[1] == max(covid_us_sum$new_tests), "*", "")`  
+T: `r format(covid_us_sum$new_tests[1], big.mark = ",")``r ifelse(covid_us_sum$new_tests[1] == max(covid_us_sum$new_tests), "*", "")`  
 Y: `r format(covid_us_sum$new_tests[2], big.mark = ",")`  
 LW: `r format(covid_us_sum$new_tests[8], big.mark = ",")`  
 <br></br>
@@ -203,10 +203,10 @@ T: `r covid_us_sum$percent_pos[1]*100`%
 Y: `r covid_us_sum$percent_pos[2]*100`%  
 LW: `r covid_us_sum$percent_pos[8]*100`%  
 <br></br>
-New Deaths  
-T: `r format(covid_us_sum$new_death[1], big.mark = ",")` `r ifelse(covid_us_sum$new_death[1] == max(covid_us_sum$new_death), "*", "")`  
-Y: `r format(covid_us_sum$new_death[2], big.mark = ",")`  
-LW: `r format(covid_us_sum$new_death[8], big.mark = ",")`  
+New Deaths (7 day avg)  
+T: `r format(covid_us_sum$new_death[1], big.mark = ",")` `r ifelse(covid_us_sum$new_death[1] == max(covid_us_sum$new_death), "*", "")` (`r format(round(covid_us_sum$new_death_07da[1]), big.mark = ",")``r ifelse(covid_us_sum$new_death_07da[1] == max(covid_us_sum$new_death_07da), "*", "")`)  
+Y: `r format(covid_us_sum$new_death[2], big.mark = ",")` (`r format(round(covid_us_sum$new_death_07da[2]), big.mark = ",")`)  
+LW: `r format(covid_us_sum$new_death[8], big.mark = ",")` (`r format(round(covid_us_sum$new_death_07da[8]), big.mark = ",")`)  
 * = Record  
 <br></br>
 The Last Time Things were this bad:
