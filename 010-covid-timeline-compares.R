@@ -3,6 +3,14 @@ load("rda/covid_us_sum.rda")
 load("rda/covid.rda")
 load("rda/ind_2w.rda")
 
+# COVID CASES TOP 10
+covid_us_sum %>%
+  arrange(desc(new_cases)) %>% slice_head(n=10) %>% select(date, day, new_cases)
+
+# COVID CASES TOP 10
+covid_us_sum %>%
+  arrange(desc(new_cases_07da)) %>% slice_head(n=10) %>% select(date, day, new_cases_07da)
+
 # CASES THIS HIGH
 covid_us_sum %>%
   filter(new_cases >= covid_us_sum$new_cases[1]) %>% select(date, new_cases)

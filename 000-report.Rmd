@@ -210,6 +210,16 @@ LW: `r format(covid_us_sum$new_death[8], big.mark = ",")` (`r format(round(covid
 * = Record  
 <br></br>
 The Last Time Things were this bad:
+```{r CASES TOP 10, warning=FALSE, echo=FALSE, message=FALSE}
+covid_us_sum %>%
+  arrange(desc(new_cases)) %>% slice_head(n=10) %>% select(date, day, new_cases)
+```
+
+```{r CASES TOP 10 07DAY AVERAGE, warning=FALSE, echo=FALSE, message=FALSE}
+covid_us_sum %>%
+  arrange(desc(new_cases_07da)) %>% slice_head(n=10) %>% select(date, day, new_cases_07da)
+```
+
 ```{r CASES THIS HIGH, warning=FALSE, echo=FALSE, message=FALSE}
 covid_us_sum %>%
   filter(new_cases >= covid_us_sum$new_cases[1]) %>% select(date, new_cases)

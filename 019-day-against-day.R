@@ -45,8 +45,8 @@ covid_us_sum %>%
   mutate(weeks = min(date)) %>%
   filter(date >= ymd(20200901)) %>%
   ggplot(aes(x = day, y = new_cases)) +
-  geom_boxplot() +
-  geom_point() +
+  geom_boxplot(fill = "dark blue", alpha = .2, outlier.alpha = 0) +
+  geom_jitter(width = .2, alpha = .5, col = "dark blue") +
   theme_DataStache()
 
 ##### DEATHS DAY OF THE WEEK #####
@@ -58,10 +58,9 @@ covid_us_sum %>%
   mutate(weeks = min(date)) %>%
   filter(date >= ymd(20200901)) %>%
   ggplot(aes(x = day, y = new_death)) +
-  geom_boxplot() +
-  geom_point() +
+  geom_boxplot(fill = "dark blue", alpha = .2, outlier.alpha = 0) +
+  geom_jitter(width = .2, alpha = .5, col = "dark blue") +
   theme_DataStache()
-
 
 ##### TESTS DAY OF THE WEEK #####
 # Box Plot of New Tests Day of Week over Time
@@ -72,8 +71,8 @@ covid_us_sum %>%
   mutate(weeks = min(date)) %>%
   filter(date >= ymd(20200901)) %>%
   ggplot(aes(x = day, y = new_tests)) +
-  geom_boxplot() +
-  geom_point() +
+  geom_boxplot(fill = "dark blue", alpha = .2, outlier.alpha = 0) +
+  geom_jitter(width = .2, alpha = .5, col = "dark blue") +
   theme_DataStache()
 
 
@@ -86,8 +85,8 @@ covid_us_sum %>%
   mutate(weeks = min(date)) %>%
   filter(date >= ymd(20200901)) %>%
   ggplot(aes(x = day, y = percent_pos)) +
-  geom_boxplot() +
-  geom_point() +
+  geom_boxplot(fill = "dark blue", alpha = .2, outlier.alpha = 0) +
+  geom_jitter(width = .2, alpha = .5, col = "dark blue") +
   theme_DataStache()
 
 ##### NEW HOSP DAY OF THE WEEK #####
@@ -99,8 +98,8 @@ covid_us_sum %>%
   mutate(weeks = min(date)) %>%
   filter(date >= ymd(20200901)) %>%
   ggplot(aes(x = day, y = new_hosp)) +
-  geom_boxplot() +
-  geom_point() +
+  geom_boxplot(fill = "dark blue", alpha = .2, outlier.alpha = 0) +
+  geom_jitter(width = .2, alpha = .5, col = "dark blue") +
   theme_DataStache()
 
 
