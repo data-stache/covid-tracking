@@ -1,4 +1,5 @@
 load("rda/covid_us_sum.rda")
+options(digits = 3)
 
 deaths <- covid_us_sum %>%
   filter(date >= ymd(20200701)) %>%
@@ -49,6 +50,7 @@ se_St <- qnorm(.975) * sd_St / sqrt(N_St)
 
 # DATES
 sun <- covid_us_sum %>%
+  group_by(day) %>%
   filter(day == "Sunday" & date == max(date)) %>%
   select(new_death, date)
 
@@ -82,7 +84,7 @@ sat <- covid_us_sum %>%
   select(new_death, date) %>%
   slice(1)
 
-
+Day <- c("Mon", "Tues", "Wed", "Thurs", "Fri", "Sat")
 Date <- as.Date(c(ifelse(mon$date >= sun$date, mon$date, NA),
                   ifelse(tues$date >= sun$date, tues$date, NA),
                   ifelse(wed$date >= sun$date, wed$date, NA),
@@ -101,7 +103,7 @@ Actual <- c(ifelse(mon$date >= sun$date, mon$new_death, NA),
             ifelse(fri$date >= sun$date, fri$new_death, NA),
             ifelse(sat$date >= sun$date, sat$new_death, NA))
 
-this_week <- data.frame(Date, Model, Low, High, Actual, row.names = c("Mon", "Tues", "Wed", "Thurs", "Fri", "Sat")) %>%
+this_week <- data.frame(Day, Date, Model, Low, High, Actual) %>%
   mutate(hit = ifelse(Actual >= Low & Actual <= High, TRUE, FALSE))
 
 this_week
@@ -109,4 +111,3 @@ this_week %>%
   summarise(low_avg = mean(Low),
             model_avg = mean(Model),
             high_avg = mean(High))
-s
