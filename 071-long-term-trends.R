@@ -5,7 +5,7 @@ head(covid_us_sum)
 
 ind_date <- ymd(20201101)
 
-covid_us_sum %>%
+dat <- covid_us_sum %>%
   filter(date >= ymd(20200301) & date < ind_date) %>%
   mutate(month = month(date, label = TRUE),
          day = factor(day, levels = c("Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"))) %>%
@@ -16,8 +16,12 @@ covid_us_sum %>%
   group_by(month) %>%
   mutate(cases_per = round(cases / sum(cases) * 100, 1),
          death_per = round(death / sum(death) * 100, 1),
-         tests_per = round(tests / sum(tests) * 100, 1)) %>%
-  ggplot(aes(x = month, y = death, fill = day, label = cases_per)) +
+         tests_per = round(tests / sum(tests) * 100, 1))
+
+dat %>%
+  mutate(cases_per = paste(cases_per,"%", sep = "")) %>%
+  ggplot(aes(x = month, y = cases, fill = day, label = cases_per)) +
   geom_col(col = "black") +
-  geom_text(size = 3, position = position_stack(vjust = 0.5)) +
+  geom_label(size = 3, position = position_stack(vjust = 0.5)) +
   scale_fill_viridis(discrete = TRUE)
+  
