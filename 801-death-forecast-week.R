@@ -104,7 +104,10 @@ Actual <- c(ifelse(mon$date >= sun$date, mon$new_death, NA),
             ifelse(sat$date >= sun$date, sat$new_death, NA))
 
 this_week <- data.frame(Day, Date, Model, Low, High, Actual) %>%
-  mutate(hit = ifelse(Actual >= Low & Actual <= High, TRUE, FALSE))
+  mutate(hit = ifelse(Actual >= Low & Actual <= High, TRUE, FALSE),
+         lo_miss = ifelse(hit == FALSE, (Actual - Low) / Low, NA),
+         miss = ifelse(hit == FALSE, (Actual - Model) / Model, NA),
+         hi_miss = ifelse(hit == FALSE, (Actual - High) / High, NA))
 
 this_week
 this_week %>%
