@@ -4,6 +4,7 @@ library(dplyr)
 library(zoo)
 library(lubridate)
 library(janitor)
+library(caret)
 
 library(ggplot2)
 library(gghighlight)
