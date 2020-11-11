@@ -21,8 +21,8 @@ covid_us_sum %>%
   filter(date >= ind_tdy - (7*12-1)) %>%
   mutate(day = factor(day, levels = c("Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"))) %>%
   group_by(day) %>%
-  summarize(cases_tot = sum(new_death),
-            cases_per = sum(new_death) / sum(.$new_death)) %>%
+  summarize(deaths_tot = sum(new_death),
+            deaths_per = sum(new_death) / sum(.$new_death)) %>%
   ungroup()
 
 # % COUNT TESTS BY DAY OF WEEK - LAST 3 MONTHS
@@ -30,8 +30,8 @@ covid_us_sum %>%
   filter(date >= ind_tdy - (7*12-1)) %>%
   mutate(day = factor(day, levels = c("Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"))) %>%
   group_by(day) %>%
-  summarize(cases_tot = sum(new_tests),
-            cases_per = sum(new_tests) / sum(.$new_tests)) %>%
+  summarize(tests_tot = sum(new_tests),
+            tests_per = sum(new_tests) / sum(.$new_tests)) %>%
   ungroup()
 
 
@@ -176,3 +176,4 @@ covid_us_sum %>%
   labs(caption = "Created by Andrew F. Griffin\nData from the Covid Tracking Project") +
   theme_DataStache() +
   theme(axis.text.x = element_text(angle = 90))
+

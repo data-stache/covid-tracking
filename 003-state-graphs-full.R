@@ -5,7 +5,7 @@ load("rda/theme_DataStache.rda")
 options(digits = 3)
 
 ## Pick State (ABB)
-st <- "MD"
+st <- "DE"
 state <- populations %>% filter(state == st) %>% pull(state_name)
 
 

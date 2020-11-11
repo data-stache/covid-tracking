@@ -20,7 +20,6 @@ covid %>%
   filter(date %in% ind_tywm_date)
 
 # NEW CASE PER CAPITA LAST 7 DAYS
-
 merge(covid_state_growth, covid_state_zones, by = c("state", "sum_cases_percap", "percent_pos")) %>%
   filter(state == st) %>%
   select(state_name, sum_cases_percap, sum_tests_percap, percent_pos, sum_death_percap, sum_new_hosp, cases_zone, percent_zone)

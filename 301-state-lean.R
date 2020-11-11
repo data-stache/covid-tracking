@@ -36,6 +36,7 @@ covid_pol <- covid_pol %>%
 ##### CASES PER CAPITA VS POLITICAL LEANINGS (FULL PANDEMIC) #####
 # TOTAL CASES OF COVID
 covid_pol %>%
+  filter(date >= ymd(20200501)) %>%
   group_by(state) %>%
   summarize(cases = sum(new_cases) / unique(pop) * 100000,
             partisan = unique(lean_z)) %>%
@@ -44,29 +45,84 @@ covid_pol %>%
   geom_text_repel() +
   geom_smooth(method = "lm")
 
-# CASES OF COVID PER MONTH
-covid_pol_M <- covid_pol %>%
-  mutate(month = month(date)) %>%
-  group_by(state, month) %>%
+
+##### STATE LEAN -- GRAPHS PICK A MONTH #####
+mth <- 'Oct'
+covid_pol %>%
+  filter(date >= ymd(20200301)) %>%
+  mutate(month = month(date, label = TRUE)) %>%
+  filter(month == mth) %>%
+  group_by(state) %>%
   summarize(cases = sum(new_cases) / unique(pop) * 100000,
-            lean_z = unique(lean_z)) %>%
-  ungroup()
+            partisan = unique(lean_z)) %>%
+  ggplot(aes(x = partisan, y = cases, label = state)) +
+  geom_vline(xintercept = 0, size = .5, col = "40grey") +
+  geom_hline(yintercept = 0, size = .5, col = "40grey") +
+  geom_point(color = "dark blue", alpha = .5) +
+  geom_smooth(method = "lm") +
+  geom_text_repel() +
+  coord_cartesian(xlim = c(min(covid_pol$lean_z) * 1.1, max(covid_pol$lean_z) * 1.1), ylim = c(0,NA)) +
+  theme_DataStache() +
+  ggtitle("Does Political Leaning Impact New Case Load") +
+  labs(caption = "Created by Andrew F. Griffin\nData The Covid Tracking Project",
+       subtitle = "Lean based on FiveThirtyEight SLPLI and Cook PVI")
 
-covid_pol_M %>%
-  filter(month >= 5) %>%
-  ggplot(aes(x = lean_z, y = cases, label = state)) +
-  geom_point(alpha = .5) +
-  geom_smooth(method = "lm")
+covid_pol %>%
+  filter(date >= ymd(20200301)) %>%
+  mutate(month = month(date, label = TRUE)) %>%
+  filter(month == mth) %>%
+  group_by(state) %>%
+  summarize(death = sum(new_death) / unique(pop) * 100000,
+            partisan = unique(lean_z)) %>%
+  ggplot(aes(x = partisan, y = death, label = state)) +
+  geom_vline(xintercept = 0, size = .5, col = "40grey") +
+  geom_hline(yintercept = 0, size = .5, col = "40grey") +
+  geom_point(color = "dark blue", alpha = .5) +
+  geom_smooth(method = "lm") +
+  geom_text_repel() +
+  coord_cartesian(xlim = c(min(covid_pol$lean_z) * 1.1, max(covid_pol$lean_z) * 1.1), ylim = c(0,NA)) +
+  theme_DataStache() +
+  ggtitle("Does Political Leaning Impact Death Toll") +
+  labs(caption = "Created by Andrew F. Griffin\nData The Covid Tracking Project",
+       subtitle = "Lean based on FiveThirtyEight SLPLI and Cook PVI")
 
-covid_pol_M %>%
-  group_by(month) %>%
-  summarise(cor = cor(cases, lean_z))
+covid_pol %>%
+  filter(date >= ymd(20200301)) %>%
+  mutate(month = month(date, label = TRUE)) %>%
+  filter(month == mth) %>%
+  group_by(state) %>%
+  summarize(pos = sum(new_cases) / sum(new_tests) * 100,
+            partisan = unique(lean_z)) %>%
+  ggplot(aes(x = partisan, y = pos, label = state)) +
+  geom_vline(xintercept = 0, size = .5, col = "40grey") +
+  geom_hline(yintercept = 0, size = .5, col = "40grey") +
+  geom_point(color = "dark blue", alpha = .5) +
+  geom_smooth(method = "lm") +
+  geom_text_repel() +
+  coord_cartesian(xlim = c(min(covid_pol$lean_z) * 1.1, max(covid_pol$lean_z) * 1.1), ylim = c(0,NA)) +
+  theme_DataStache() +
+  ggtitle("Does Political Leaning Impact Percent Share Positive Tests") +
+  labs(caption = "Created by Andrew F. Griffin\nData The Covid Tracking Project",
+       subtitle = "Lean based on FiveThirtyEight SLPLI and Cook PVI")
 
-model <- lm(cases ~ lean_z, data = covid_pol_M)
-model
-
-coefs <- tidy(model, conf.int = TRUE)
-coefs
+covid_pol %>%
+  filter(date >= ymd(20200301)) %>%
+  mutate(month = month(date, label = TRUE)) %>%
+  filter(month == mth) %>%
+  group_by(state) %>%
+  summarize(tests = sum(new_tests) / unique(pop) * 100000,
+            partisan = unique(lean_z)) %>%
+  ggplot(aes(x = partisan, y = tests, label = state)) +
+  geom_vline(xintercept = 0, size = .5, col = "40grey") +
+  geom_hline(yintercept = 0, size = .5, col = "40grey") +
+  geom_point(color = "dark blue", alpha = .5) +
+  geom_smooth(method = "lm") +
+  geom_text_repel() +
+  coord_cartesian(xlim = c(min(covid_pol$lean_z) * 1.1, max(covid_pol$lean_z) * 1.1), ylim = c(0,NA)) +
+  theme_DataStache() +
+  ggtitle("Does Political Leaning Impact New Testing") +
+  labs(caption = "Created by Andrew F. Griffin\nData The Covid Tracking Project",
+       subtitle = "Lean based on FiveThirtyEight SLPLI and Cook PVI")
 
 
 ##### STATE LEAN -- GRAPHS PER CAPITA VS POLITICAL LEANINGS STRATIFIED BY MONTH #####
@@ -83,10 +139,10 @@ covid_pol %>%
   geom_smooth(method = "lm") +
   coord_cartesian(xlim = c(min(covid_pol$lean_z) * 1.1, max(covid_pol$lean_z) * 1.1), ylim = c(0,NA)) +
   theme_DataStache() +
-  theme(panel.border = element_rect(colour = "black", fill=NA, size=.7)) +
+  theme(panel.border = element_rect(colour = "grey 80", fill=NA, size=.7)) +
   facet_wrap(. ~ month, strip.position="bottom") +
   theme(strip.text.x = element_text(face = "bold"),
-        strip.background = element_rect(colour = "black", size=.7)) +
+        strip.background = element_rect(colour = "grey 80", size=.7)) +
   ggtitle("Does Political Leaning Impact New Case Load") +
   labs(caption = "Created by Andrew F. Griffin\nData The Covid Tracking Project",
        subtitle = "Lean based on FiveThirtyEight SLPLI and Cook PVI")
@@ -112,10 +168,10 @@ covid_pol %>%
   geom_smooth(method = "lm") +
   coord_cartesian(xlim = c(min(covid_pol$lean_z) * 1.1, max(covid_pol$lean_z) * 1.1), ylim = c(0,NA)) +
   theme_DataStache() +
-  theme(panel.border = element_rect(colour = "black", fill=NA, size=.7)) +
+  theme(panel.border = element_rect(colour = "grey 80", fill=NA, size=.7)) +
   facet_wrap(. ~ month, strip.position="bottom") +
   theme(strip.text.x = element_text(face = "bold"),
-        strip.background = element_rect(colour = "black", size=.7)) +
+        strip.background = element_rect(colour = "grey 80", size=.7)) +
   ggtitle("Does Political Leaning Impact Death Toll") +
   labs(caption = "Created by Andrew F. Griffin\nData The Covid Tracking Project",
        subtitle = "Lean based on FiveThirtyEight SLPLI and Cook PVI")
@@ -138,10 +194,10 @@ covid_pol %>%
   geom_smooth(method = "lm") +
   coord_cartesian(xlim = c(min(covid_pol$lean_z) * 1.1, max(covid_pol$lean_z) * 1.1), ylim = c(0,NA)) +
   theme_DataStache() +
-  theme(panel.border = element_rect(colour = "black", fill=NA, size=.7)) +
+  theme(panel.border = element_rect(colour = "grey 80", fill=NA, size=.7)) +
   facet_wrap(. ~ month, strip.position="bottom") +
   theme(strip.text.x = element_text(face = "bold"),
-        strip.background = element_rect(colour = "black", size=.7)) +
+        strip.background = element_rect(colour = "grey 80", size=.7)) +
   ggtitle("Does Political Leaning Impact Percent Share Positive Tests") +
   labs(caption = "Created by Andrew F. Griffin\nData The Covid Tracking Project",
        subtitle = "Lean based on FiveThirtyEight SLPLI and Cook PVI")
@@ -190,14 +246,18 @@ covid_pol %>%
   mutate(bx_month = paste(month, lean, sep = ""),
          bx_month = factor(bx_month, levels = c("MarD", "MarR", "AprD", "AprR","MayD", 'MayR', 'JunD', 'JunR', 'JulD', 'JulR', 'AugD', 'AugR', 'SepD', 'SepR', 'OctD', 'OctR'))) %>%
   ggplot(aes(x = bx_month, y = cases, fill = lean)) +
+  geom_hline(yintercept = 0, col = "grey 60", size = .5) +
   geom_boxplot(aes(group = bx_month), alpha = .5) +
   scale_color_manual(values = pol_party) +
   scale_fill_manual(values = pol_party) +
   geom_jitter(aes(col = lean), alpha = .5, width = .2) +
   theme_DataStache() +
-  theme(axis.text.x = element_blank()) +
+  theme(axis.text.x = element_blank(),
+        panel.grid.major.x = element_blank(),
+        panel.border = element_rect(colour = "grey 80", fill=NA, size=.7)) +
   facet_grid(. ~ month, scales = "free_x", switch = 'x') +
-  theme(strip.text.x = element_text(face = "bold")) +
+  theme(strip.text.x = element_text(face = "bold"),
+        strip.background = element_rect(colour = "grey 80", size=.7)) +
   ggtitle("Impact of State Political Lean on New Cases",
           subtitle = "Lean based on FiveThirtyEight SLPLI and Cook PVI") +
   labs(caption = "Created by Andrew F. Griffin\nData From The Covid Tracking Project")
@@ -218,14 +278,18 @@ covid_pol %>%
   mutate(bx_month = paste(month, lean, sep = ""),
          bx_month = factor(bx_month, levels = c("MarD", "MarR", "AprD", "AprR","MayD", 'MayR', 'JunD', 'JunR', 'JulD', 'JulR', 'AugD', 'AugR', 'SepD', 'SepR', 'OctD', 'OctR'))) %>%
   ggplot(aes(x = bx_month, y = death, fill = lean)) +
+  geom_hline(yintercept = 0, col = "grey 60", size = .5) +
   geom_boxplot(aes(group = bx_month), alpha = .5) +
   scale_color_manual(values = pol_party) +
   scale_fill_manual(values = pol_party) +
   geom_jitter(aes(col = lean), alpha = .5, width = .2) +
   theme_DataStache() +
-  theme(axis.text.x = element_blank()) +
+  theme(axis.text.x = element_blank(),
+        panel.grid.major.x = element_blank(),
+        panel.border = element_rect(colour = "grey 80", fill=NA, size=.7)) +
   facet_grid(. ~ month, scales = "free_x", switch = 'x') +
-  theme(strip.text.x = element_text(face = "bold")) +
+  theme(strip.text.x = element_text(face = "bold"),
+        strip.background = element_rect(colour = "grey 80", size=.7)) +
   ggtitle("Impact of State Political Lean on New Deaths",
           subtitle = "Lean based on FiveThirtyEight SLPLI and Cook PVI") +
   labs(caption = "Created by Andrew F. Griffin\nData From The Covid Tracking Project")
@@ -246,14 +310,18 @@ covid_pol %>%
   mutate(bx_month = paste(month, lean, sep = ""),
          bx_month = factor(bx_month, levels = c("MarD", "MarR", "AprD", "AprR","MayD", 'MayR', 'JunD', 'JunR', 'JulD', 'JulR', 'AugD', 'AugR', 'SepD', 'SepR', 'OctD', 'OctR'))) %>%
   ggplot(aes(x = bx_month, y = tests, fill = lean)) +
+  geom_hline(yintercept = 0, col = "grey 60", size = .5) +
   geom_boxplot(aes(group = bx_month), alpha = .5) +
   scale_color_manual(values = pol_party) +
   scale_fill_manual(values = pol_party) +
   geom_jitter(aes(col = lean), alpha = .5, width = .2) +
   theme_DataStache() +
-  theme(axis.text.x = element_blank()) +
+  theme(axis.text.x = element_blank(),
+        panel.grid.major.x = element_blank(),
+        panel.border = element_rect(colour = "grey 80", fill=NA, size=.7)) +
   facet_grid(. ~ month, scales = "free_x", switch = 'x') +
-  theme(strip.text.x = element_text(face = "bold")) +
+  theme(strip.text.x = element_text(face = "bold"),
+        strip.background = element_rect(colour = "grey 80", size=.7)) +
   ggtitle("Impact of State Political Lean on New Testing",
           subtitle = "Lean based on FiveThirtyEight SLPLI and Cook PVI") +
   labs(caption = "Created by Andrew F. Griffin\nData From The Covid Tracking Project")
@@ -274,14 +342,18 @@ covid_pol %>%
   mutate(bx_month = paste(month, lean, sep = ""),
          bx_month = factor(bx_month, levels = c("MarD", "MarR", "AprD", "AprR","MayD", 'MayR', 'JunD', 'JunR', 'JulD', 'JulR', 'AugD', 'AugR', 'SepD', 'SepR', 'OctD', 'OctR'))) %>%
   ggplot(aes(x = bx_month, y = pos, fill = lean)) +
+  geom_hline(yintercept = 0, col = "grey 60", size = .5) +
   geom_boxplot(aes(group = bx_month), alpha = .5) +
   scale_color_manual(values = pol_party) +
   scale_fill_manual(values = pol_party) +
   geom_jitter(aes(col = lean), alpha = .5, width = .2) +
   theme_DataStache() +
-  theme(axis.text.x = element_blank()) +
+  theme(axis.text.x = element_blank(),
+        panel.grid.major.x = element_blank(),
+        panel.border = element_rect(colour = "grey 80", fill=NA, size=.7)) +
   facet_grid(. ~ month, scales = "free_x", switch = 'x') +
-  theme(strip.text.x = element_text(face = "bold")) +
+  theme(strip.text.x = element_text(face = "bold"),
+        strip.background = element_rect(colour = "grey 80", size=.7)) +
   ggtitle("Impact of State Political Lean on Average Positive Tests",
           subtitle = "Lean based on FiveThirtyEight SLPLI and Cook PVI") +
   labs(caption = "Created by Andrew F. Griffin\nData From The Covid Tracking Project")

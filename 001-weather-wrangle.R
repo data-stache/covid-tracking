@@ -6,6 +6,8 @@ library(tidyverse)
 library(zoo)
 library(lubridate)
 
+# meteo_show_cache()
+
 load("rda/covid.rda")
 
 ##### 01 AL ALABAMA #####
@@ -1730,6 +1732,8 @@ weather_usa %>%
   arrange(date)
 save(weather_usa, file = "rda/weather_usa.rda")
 
-
+weather_usa %>%
+  filter(date <= ymd(20201031)) %>%
+  arrange(desc(date))
 
 

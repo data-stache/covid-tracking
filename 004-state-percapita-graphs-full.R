@@ -5,7 +5,7 @@ load("rda/theme_DataStache.rda")
 options(digits = 3)
 
 ## Pick State (ABB)
-st <- "MD"
+st <- "DE"
 state <- populations %>% filter(state == st) %>% pull(state_name)
 
 
@@ -14,11 +14,11 @@ state <- populations %>% filter(state == st) %>% pull(state_name)
 p_new_case <- covid %>%
   filter(state == st) %>%
   ggplot(aes(date, new_cases_percap)) +
-  geom_hline(yintercept = 14, col = "grey40", alpha = .5, size = .5) +
+  geom_hline(yintercept = 14, col = "red", alpha = .7, size = .25) +
   geom_bar(stat = "identity", fill="blue", alpha = .3, size = .1) +
   scale_color_manual(values="light grey") +
   geom_line(aes(y = new_cases_percap_07da), size = .25, col="blue") +
-  ggtitle(paste(state, sep = " ", "New Cases Total")) +
+  ggtitle(paste(state, sep = " ", "New Cases Per 100k")) +
   labs(caption = "Created by Andrew F. Griffin\nCovid Data from The Covid Tracking Project") +
   scale_x_date(date_labels = "%b", breaks= "1 month") +
   scale_y_continuous(expand = c(0,0)) +
@@ -34,7 +34,7 @@ p_new_test <- covid %>%
   geom_bar(stat = "identity", fill="dark green", alpha = .3, size = .1) +
   scale_color_manual(values="light grey") +
   geom_line(aes(y = new_tests_percap_07da), size = .25, col="dark green") +
-  ggtitle(paste(state, sep = " ", "New Tests Total")) +
+  ggtitle(paste(state, sep = " ", "New Tests Per 100k")) +
   labs(caption = "Created by Andrew F. Griffin\nCovid Data from The Covid Tracking Project") +
   scale_x_date(date_labels = "%b", breaks= "1 month") +
   scale_y_continuous(expand = c(0,0)) +
@@ -50,7 +50,7 @@ p_new_deaths <- covid %>%
   geom_bar(stat = "identity", fill="dark red", alpha = .3, size = .1) +
   scale_color_manual(values="light grey") +
   geom_line(aes(y = new_death_percap_07da), size = .25, col="dark red") +
-  ggtitle(paste(state, sep = " ", "New Deaths Total")) +
+  ggtitle(paste(state, sep = " ", "New Deaths Per 100k")) +
   labs(caption = "Created by Andrew F. Griffin\nCovid Data from The Covid Tracking Project") +
   scale_x_date(date_labels = "%b", breaks= "1 month") +
   scale_y_continuous(expand = c(0,0)) +
@@ -72,7 +72,7 @@ p_percent_pos <- covid %>%
   labs(caption = "Created by Andrew F. Griffin\nCovid Data from The Covid Tracking Project") +
   scale_x_date(date_labels = "%b", breaks= "1 month") +
   scale_y_continuous(breaks = seq(0,100,5), expand = c(0,0)) +
-  coord_cartesian(ylim = c(0,100)) +
+  coord_cartesian(ylim = c(0,35)) +
   geom_hline(yintercept=0, col = "grey40", size = .4) +
   theme_DataStache() +
   theme(text = element_text(size = rel(.6)))
@@ -116,7 +116,7 @@ G <- arrangeGrob(p_new_case, p_new_test, p_hosp, p_new_deaths, p_percent_pos, p_
 p_width <- 6
 p_height <- (9/16) * p_width 
 
-ggsave(paste("figs/", state, sep = " ", "Total Per Capita.png"),
+ggsave(paste("figs/", state, sep = " ", "Per 100K.png"),
        G,
        width = p_width,
        height = p_height,
