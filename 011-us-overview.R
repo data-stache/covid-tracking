@@ -15,4 +15,8 @@ covid_us_sum %>%
   select(date, new_cases, new_tests, percent_pos, new_death, new_hosp) %>%
   filter(date %in% ind_tywm_date)
 
+covid_us_sum %>%
+  select(date, new_cases_07da, new_tests_07da, percent_pos_07da, new_death_07da, new_hosp_07da) %>%
+  filter(date %in% ind_tywm_date)
+
 covid_us_growth

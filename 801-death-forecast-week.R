@@ -2,7 +2,7 @@ load("rda/covid_us_sum.rda")
 options(digits = 3)
 
 deaths <- covid_us_sum %>%
-  filter(date >= ymd(20200701)) %>%
+  filter(date >= ymd(20201001)) %>%
   mutate(week = epiweek(date),
          day = factor(day, levels = c("Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"))) %>% 
   group_by(week) %>%
@@ -103,7 +103,7 @@ Actual <- c(ifelse(mon$date >= sun$date, mon$new_death, NA),
             ifelse(fri$date >= sun$date, fri$new_death, NA),
             ifelse(sat$date >= sun$date, sat$new_death, NA))
 
-this_week <- data.frame(Day, Date, Model, Low, High, Actual) %>%
+this_week <- data.frame(Day, Date, Low, Model, High, Actual) %>%
   mutate(hit = ifelse(Actual >= Low & Actual <= High, TRUE, FALSE),
          lo_miss = ifelse(hit == FALSE, (Actual - Low) / Low, NA),
          miss = ifelse(hit == FALSE, (Actual - Model) / Model, NA),
@@ -113,4 +113,7 @@ this_week
 this_week %>%
   summarise(low_avg = mean(Low),
             model_avg = mean(Model),
-            high_avg = mean(High))
+            high_avg = mean(High),
+            low_sum = sum(Low),
+            model_sum = sum(Model),
+            high_sum = sum(High))
