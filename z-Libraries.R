@@ -5,6 +5,7 @@ library(zoo)
 library(lubridate)
 library(janitor)
 library(caret)
+library(knitr)
 
 library(ggplot2)
 library(gghighlight)
