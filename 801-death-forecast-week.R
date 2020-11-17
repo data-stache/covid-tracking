@@ -109,11 +109,14 @@ this_week <- data.frame(Day, Date, Low, Model, High, Actual) %>%
          miss = ifelse(hit == FALSE, (Actual - Model) / Model, NA),
          hi_miss = ifelse(hit == FALSE, (Actual - High) / High, NA))
 
-this_week
+this_week %>%
+  kable()
+
 this_week %>%
   summarise(low_avg = mean(Low),
             model_avg = mean(Model),
             high_avg = mean(High),
             low_sum = sum(Low),
             model_sum = sum(Model),
-            high_sum = sum(High))
+            high_sum = sum(High)) %>%
+  kable()

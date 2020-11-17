@@ -7,7 +7,7 @@ load('rda/covid_us_sum.rda')
 load('rda/theme_DataStache.rda')
 
 covid_weekly <- covid_us_sum %>%
-  filter(date >= ymd(20200301) & date <= ymd(20201114)) %>%
+  filter(date >= ymd(20200301)) %>%
   mutate(week = epiweek(date)) %>%
   group_by(week) %>%
   summarize(new_cases = sum(new_cases),
@@ -16,7 +16,7 @@ covid_weekly <- covid_us_sum %>%
             new_death = sum(new_death))
 
 week_start <- covid_us_sum %>%
-  filter(date >= ymd(20200301) & date <= ymd(20201114)) %>%
+  filter(date >= ymd(20200301)) %>%
   mutate(week = epiweek(date)) %>%
   group_by(week) %>%
   arrange(date) %>%

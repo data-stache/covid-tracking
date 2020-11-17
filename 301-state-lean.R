@@ -22,7 +22,7 @@ covid_pol$party_by[dc_ind] <- max_dem
 
 covid_pol <- covid_pol %>%
   # FILTER ONLY COMPLETE MONTHS
-  filter(date < ymd(20201101)) %>%
+#  filter(date < ymd(20201101)) %>%
   # CHANGE SLPLI TO - DEM and + REP
   mutate(party_by = ifelse(SLPLI == "Democrat", party_by * (-1), party_by)) %>%
   # THIN COLUMNS
@@ -170,7 +170,7 @@ ggsave("figs/state-lean-hospitalization.png",
 
 
 ##### STATE LEAN -- GRAPHS PICK A MONTH #####
-mth <- 'Oct'
+mth <- 'Nov'
 covid_pol %>%
   filter(date >= ymd(20200301)) %>%
   mutate(month = month(date, label = TRUE)) %>%
