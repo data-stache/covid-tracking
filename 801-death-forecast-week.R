@@ -105,9 +105,9 @@ Actual <- c(ifelse(mon$date >= sun$date, mon$new_death, NA),
 
 this_week <- data.frame(Day, Date, Low, Model, High, Actual) %>%
   mutate(hit = ifelse(Actual >= Low & Actual <= High, TRUE, FALSE),
-         lo_miss = ifelse(hit == FALSE, (Actual - Low) / Low, NA),
+         lo_miss = ifelse(hit == FALSE, ifelse(Actual > High, NA, (Actual - Low) / Low), NA),
          miss = ifelse(hit == FALSE, (Actual - Model) / Model, NA),
-         hi_miss = ifelse(hit == FALSE, (Actual - High) / High, NA))
+         hi_miss = ifelse(hit == FALSE, ifelse(Actual < Low, NA, (Actual - High) / High), NA))
 
 this_week %>%
   kable()
