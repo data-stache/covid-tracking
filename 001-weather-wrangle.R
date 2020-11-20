@@ -6,7 +6,9 @@ library(tidyverse)
 library(zoo)
 library(lubridate)
 
-# meteo_show_cache()
+# CHECK ON ILLINOIS - CURRENTLY TURNED OFF
+# cache <- meteo_show_cache()
+# meteo_clear_cache()
 
 load("rda/covid.rda")
 
@@ -406,36 +408,36 @@ weather_usa <- rbind(weather_usa, weather_ID)
 
 
 ##### 17 IL ILLINOIS #####
-stations <- ncdc(datasetid="GHCND", locationid = "FIPS:17", startdate = "2020-03-01", enddate = "2020-03-31", datatypeid = c("TMAX", "TMIN"))
-stations <- stations[[2]]
-IL_stations <- unique(stations$station) %>%
-  str_replace(.,"GHCND:", "")
+#stations <- ncdc(datasetid="GHCND", locationid = "FIPS:17", startdate = "2020-03-01", enddate = "2020-03-31", datatypeid = c("TMAX", "TMIN"))
+#stations <- stations[[2]]
+#IL_stations <- unique(stations$station) %>%
+#  str_replace(.,"GHCND:", "")
 
-weather_IL <- meteo_pull_monitors(IL_stations, date_min = "2020-03-01", var = c("TMIN", "TMAX"))
+#weather_IL <- meteo_pull_monitors(IL_stations, date_min = "2020-03-01", var = c("TMIN", "TMAX"))
 
-weather_IL <- weather_IL %>%
-  arrange(date) %>%
+#weather_IL <- weather_IL %>%
+#  arrange(date) %>%
   # CONVERT TO °F
-  mutate(tmax = ((tmax * .1) * (9/5)) + 32,
-         tmin = ((tmin * .1) * (9/5)) + 32,
+#  mutate(tmax = ((tmax * .1) * (9/5)) + 32,
+#         tmin = ((tmin * .1) * (9/5)) + 32,
          # ADD AVERAGE TEMPERATURE
-         tavg = (tmin + tmax) / 2) %>%
-  group_by(date) %>%
+#         tavg = (tmin + tmax) / 2) %>%
+#  group_by(date) %>%
   # AVERAGE ALL IL STATIONS
-  summarise(tavg = mean(tavg, na.rm = TRUE),
-            tmax = mean(tmax, na.rm = TRUE),
-            tmin = mean(tmin, na.rm = TRUE)) %>%
+#  summarise(tavg = mean(tavg, na.rm = TRUE),
+#            tmax = mean(tmax, na.rm = TRUE),
+#            tmin = mean(tmin, na.rm = TRUE)) %>%
   # 7 DAY ROLLING AVERAGE
-  mutate(tavg_07da = rollapply(tavg, width = 7, FUN=function(x) mean(x, na.rm=TRUE), by=1, by.column=TRUE, partial=TRUE, fill=NA, align="right"),
-         tmax_07da = rollapply(tmax, width = 7, FUN=function(x) mean(x, na.rm=TRUE), by=1, by.column=TRUE, partial=TRUE, fill=NA, align="right"),
-         tmin_07da = rollapply(tmin, width = 7, FUN=function(x) mean(x, na.rm=TRUE), by=1, by.column=TRUE, partial=TRUE, fill=NA, align="right"),
-         state = "IL") %>%
-  ungroup()
+#  mutate(tavg_07da = rollapply(tavg, width = 7, FUN=function(x) mean(x, na.rm=TRUE), by=1, by.column=TRUE, partial=TRUE, fill=NA, align="right"),
+#         tmax_07da = rollapply(tmax, width = 7, FUN=function(x) mean(x, na.rm=TRUE), by=1, by.column=TRUE, partial=TRUE, fill=NA, align="right"),
+#         tmin_07da = rollapply(tmin, width = 7, FUN=function(x) mean(x, na.rm=TRUE), by=1, by.column=TRUE, partial=TRUE, fill=NA, align="right"),
+#         state = "IL") %>%
+#  ungroup()
 # REORDER COLUMNS
-weather_IL <- weather_IL[,c(1,8,2,5,3,6,4,7)]
+#weather_IL <- weather_IL[,c(1,8,2,5,3,6,4,7)]
 
 # BUILD WEATHER DATA
-weather_usa <- rbind(weather_usa, weather_IL)
+#weather_usa <- rbind(weather_usa, weather_IL)
 
 
 ##### 18 IN INDIANA #####

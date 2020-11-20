@@ -14,6 +14,7 @@ covid_grid_death$state <- factor(covid_grid_death$state, levels = new_death_orde
 mask_colors <- c("orangered3", "forestgreen")
 
 p_ALL_states_new_deaths_plot <- covid_grid_death %>%
+  filter(date >= ind_xlim_3m[1]) %>%
   mutate(masks = ifelse(mask_law == "NO", "No Mask", "Yes Mask"),
          masks = factor(masks, levels = c("Yes Mask", "No Mask"))) %>%
   ggplot(aes(date, new_death_percap, fill = masks)) +
@@ -28,8 +29,7 @@ p_ALL_states_new_deaths_plot <- covid_grid_death %>%
           subtitle = "Ordered from most to least new deaths per capita in the last 7 days") +
   labs(caption = "Created by Andrew F. Griffin, Covid Data from The Covid Tracking Project") +
   scale_x_date(date_labels = "%b", breaks= "1 month") +
-  ylim(0,2) +
-  coord_cartesian(xlim = ind_xlim_3m, ylim = c(0,1.5)) +
+  coord_cartesian(ylim = c(0, max(covid_grid_death %>% filter(date >= ind_xlim_3m[1]) %>% .$new_death_percap_07da))) +
   theme_DataStache() +
   theme(axis.text.x = element_text(angle=90, hjust = 1)) +
   facet_wrap(. ~ state, strip.position="bottom") +
