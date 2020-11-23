@@ -171,8 +171,9 @@ ggsave("figs/state-lean-hospitalization.png",
 
 ##### STATE LEAN -- GRAPHS PICK A MONTH #####
 mth <- 'Nov'
+
+# CASES
 covid_pol %>%
-  filter(date >= ymd(20200301)) %>%
   mutate(month = month(date, label = TRUE)) %>%
   filter(month == mth) %>%
   group_by(state) %>%
@@ -190,8 +191,8 @@ covid_pol %>%
   labs(caption = "Created by Andrew F. Griffin\nData The Covid Tracking Project",
        subtitle = "Lean based on FiveThirtyEight SLPLI and Cook PVI")
 
+# DEATHS
 covid_pol %>%
-  filter(date >= ymd(20200301)) %>%
   mutate(month = month(date, label = TRUE)) %>%
   filter(month == mth) %>%
   group_by(state) %>%
@@ -209,8 +210,8 @@ covid_pol %>%
   labs(caption = "Created by Andrew F. Griffin\nData The Covid Tracking Project",
        subtitle = "Lean based on FiveThirtyEight SLPLI and Cook PVI")
 
+# PERCENT POSITIVE
 covid_pol %>%
-  filter(date >= ymd(20200301)) %>%
   mutate(month = month(date, label = TRUE)) %>%
   filter(month == mth) %>%
   group_by(state) %>%
@@ -228,8 +229,8 @@ covid_pol %>%
   labs(caption = "Created by Andrew F. Griffin\nData The Covid Tracking Project",
        subtitle = "Lean based on FiveThirtyEight SLPLI and Cook PVI")
 
+# TESTING
 covid_pol %>%
-  filter(date >= ymd(20200301)) %>%
   mutate(month = month(date, label = TRUE)) %>%
   filter(month == mth) %>%
   group_by(state) %>%

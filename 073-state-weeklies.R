@@ -9,7 +9,7 @@ load('rda/theme_DataStache.rda')
 names(covid)
 
 covid_us_weekly <- covid %>%
-  filter(date >= ymd(20200301) & date <= ymd(20201114)) %>%
+  filter(date >= ymd(20200301)) %>%
   mutate(week = epiweek(date)) %>%
   group_by(week, state) %>%
   summarize(new_cases = sum(new_cases_percap),
@@ -19,7 +19,7 @@ covid_us_weekly <- covid %>%
   ungroup()
 
 week_start <- covid %>%
-  filter(date >= ymd(20200301) & date <= ymd(20201114)) %>%
+  filter(date >= ymd(20200301)) %>%
   mutate(week = epiweek(date)) %>%
   group_by(week) %>%
   arrange(date) %>%
@@ -59,7 +59,7 @@ weekly_summary_function <- function(st) {
           plot.subtitle = element_text(size = rel(.5), face = 'bold',
                                        hjust = .5,
                                        vjust = 1.5, colour = 'red4'),
-          axis.text = element_text(size = rel(.2),
+          axis.text = element_text(size = rel(.4),
                                    face = "bold"),
           axis.text.x = element_text(angle = 90),
           panel.grid.major.x = element_blank(),
@@ -85,7 +85,7 @@ weekly_summary_function <- function(st) {
           plot.subtitle = element_text(size = rel(.5), face = 'bold',
                                        hjust = .5,
                                        vjust = 1.5, colour = 'magenta4'),
-          axis.text = element_text(size = rel(.2),
+          axis.text = element_text(size = rel(.4),
                                    face = "bold"),
           axis.text.x = element_text(angle = 90),
           panel.grid.major.x = element_blank(),
@@ -111,7 +111,7 @@ weekly_summary_function <- function(st) {
           plot.subtitle = element_text(size = rel(.5), face = 'bold',
                                        hjust = .5,
                                        vjust = 1.5, colour = 'dark blue'),
-          axis.text = element_text(size = rel(.2),
+          axis.text = element_text(size = rel(.4),
                                    face = "bold"),
           axis.text.x = element_text(angle = 90),
           panel.grid.major.x = element_blank(),
@@ -137,7 +137,7 @@ weekly_summary_function <- function(st) {
           plot.subtitle = element_text(size = rel(.5), face = 'bold',
                                        hjust = .5,
                                        vjust = 1.5, colour = 'green4'),
-          axis.text = element_text(size = rel(.2),
+          axis.text = element_text(size = rel(.4),
                                    face = "bold"),
           axis.text.x = element_text(angle = 90),
           panel.grid.major.x = element_blank(),
