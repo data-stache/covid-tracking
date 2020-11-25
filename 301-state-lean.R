@@ -6,34 +6,19 @@ library(tidyverse)
 load("rda/covid_pol.rda")
 load("rda/theme_DataStache.rda")
 
+options(scipen = 999)
+
 pol_party <- c("blue", "dark red")
 
-head(covid_pol %>%
-       mutate(pvi = pvi / 1000))
-
 ##### PROCESSING #####
-# APPLY CA SLPLI RATING TO DC TO POL DF
-dc_ind <- covid_pol$state == "DC"
-max_dem <- covid_pol %>%
-  filter(SLPLI == "Democrat") %>%
-  .$party_by
-max_dem <- max(max_dem, na.rm = TRUE)
-covid_pol$party_by[dc_ind] <- max_dem
-
 covid_pol <- covid_pol %>%
   # FILTER ONLY COMPLETE MONTHS
 #  filter(date < ymd(20201101)) %>%
   # CHANGE SLPLI TO - DEM and + REP
-  mutate(party_by = ifelse(SLPLI == "Democrat", party_by * (-1), party_by)) %>%
   # THIN COLUMNS
-  select(date, state, state_name, pop, new_cases, new_tests, new_death, hosp, percent_pos, party_by, pvi, mask_law, mask_date) %>%
+  select(date, state, state_name, pop, new_cases, new_tests, new_death, hosp, percent_pos, lean_avg, state_lean, party_by, pvi, mask_law, mask_date) %>%
   # MAKE PVI A DECIMAL and Z SCORES
-  mutate(cases = new_cases / pop * 100000,
-         pvi = pvi / 1000,
-         lean_avg = (pvi + party_by) / 2,
-         state_lean = case_when(lean_avg < 0 ~ "D",
-                                lean_avg == 0 ~"I",
-                                lean_avg > 0 ~ "R"))
+  mutate(cases = new_cases / pop * 100000)
 head(covid_pol)
 
 ##### CASES PER CAPITA VS POLITICAL LEANINGS (FULL PANDEMIC) #####
@@ -489,6 +474,63 @@ ggsave("figs/state-lean-hospitalization-box-plot.png",
        width = p_width,
        height = p_height, 
        dpi = "retina")
+
+##### TIME SERIES PLOTS #####
+# CASES
+covid_pol %>%
+  group_by(state_lean, date) %>%
+  summarize(cases = sum(new_cases) / sum(unique(pop)) * 100000) %>%
+  mutate(cases = rollapply(cases, width = 7, FUN=function(x) mean(x, na.rm=TRUE), by=1, by.column=TRUE, partial=TRUE, fill=NA, align="right")) %>%
+  ggplot(aes(x = date, y = cases, col = state_lean)) +
+  geom_hline(yintercept = 0, size = .5, col = "40grey") +
+  geom_line() +
+  scale_color_manual(values = pol_party) +
+  theme_DataStache() +
+  ggtitle("Does Political Leaning Impact New Case Load (Entire Pandemic)") +
+  labs(caption = "Created by Andrew F. Griffin\nData The Covid Tracking Project",
+       subtitle = "Lean based on FiveThirtyEight SLPLI and Cook PVI")
+
+# DEATHS
+covid_pol %>%
+  group_by(state_lean, date) %>%
+  summarize(deaths = sum(new_death) / sum(unique(pop)) * 100000) %>%
+  mutate(deaths = rollapply(deaths, width = 7, FUN=function(x) mean(x, na.rm=TRUE), by=1, by.column=TRUE, partial=TRUE, fill=NA, align="right")) %>%
+  ggplot(aes(x = date, y = deaths, col = state_lean)) +
+  geom_hline(yintercept = 0, size = .5, col = "40grey") +
+  geom_line() +
+  scale_color_manual(values = pol_party) +
+  theme_DataStache() +
+  ggtitle("Does Political Leaning Impact New Case Load (Entire Pandemic)") +
+  labs(caption = "Created by Andrew F. Griffin\nData The Covid Tracking Project",
+       subtitle = "Lean based on FiveThirtyEight SLPLI and Cook PVI")
+
+# TESTING
+covid_pol %>%
+  group_by(state_lean, date) %>%
+  summarize(tests = sum(new_tests) / sum(unique(pop)) * 100000) %>%
+  mutate(tests = rollapply(tests, width = 7, FUN=function(x) mean(x, na.rm=TRUE), by=1, by.column=TRUE, partial=TRUE, fill=NA, align="right")) %>%
+  ggplot(aes(x = date, y = tests, col = state_lean)) +
+  geom_hline(yintercept = 0, size = .5, col = "40grey") +
+  geom_line() +
+  scale_color_manual(values = pol_party) +
+  theme_DataStache() +
+  ggtitle("Does Political Leaning Impact New Case Load (Entire Pandemic)") +
+  labs(caption = "Created by Andrew F. Griffin\nData The Covid Tracking Project",
+       subtitle = "Lean based on FiveThirtyEight SLPLI and Cook PVI")
+
+# POSITIVE
+covid_pol %>%
+  group_by(state_lean, date) %>%
+  summarize(pos = sum(new_cases, na.rm = TRUE) / sum(new_tests, na.rm = TRUE)) %>%
+  mutate(pos = rollapply(pos, width = 7, FUN=function(x) mean(x, na.rm=TRUE), by=1, by.column=TRUE, partial=TRUE, fill=NA, align="right")) %>%
+  ggplot(aes(x = date, y = pos, col = state_lean)) +
+  geom_hline(yintercept = 0, size = .5, col = "40grey") +
+  geom_line() +
+  scale_color_manual(values = pol_party) +
+  theme_DataStache() +
+  ggtitle("Does Political Leaning Impact New Case Load (Entire Pandemic)") +
+  labs(caption = "Created by Andrew F. Griffin\nData The Covid Tracking Project",
+       subtitle = "Lean based on FiveThirtyEight SLPLI and Cook PVI")
 
 
 

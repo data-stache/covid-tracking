@@ -61,9 +61,26 @@ covid_pol <- covid %>%
   left_join(slpli) %>% 
   left_join(governors) %>%
   left_join(cook_pvi) %>%
-  select(date, state, state_name, pop, new_cases, new_tests, new_death, hosp, percent_pos, SLPLI, party_by, slpli_party, governor_party, gov_party, pvi, pvi_party, mask_law, mask_date)
+  select(date, day, state, state_name, pop, new_cases, new_tests, new_death, hosp, percent_pos, SLPLI, party_by, slpli_party, governor_party, gov_party, pvi, pvi_party, mask_law, mask_date)
 covid_pol
+
+# APPLY CA SLPLI RATING TO DC TO POL DF
+dc_ind <- covid_pol$state == "DC"
+max_dem <- covid_pol %>%
+  filter(SLPLI == "Democrat") %>%
+  .$party_by
+max_dem <- max(max_dem, na.rm = TRUE)
+covid_pol$party_by[dc_ind] <- max_dem
+
+# STATE LEAN AVG
+covid_pol <- covid_pol %>%
+  mutate(party_by = ifelse(SLPLI == "Democrat", party_by * (-1), party_by), 
+         pvi = pvi / 1000,
+         lean_avg = (pvi + party_by) / 2,
+         state_lean = case_when(lean_avg < 0 ~ "D",
+                                lean_avg == 0 ~"I",
+                                lean_avg > 0 ~ "R")) %>%
+  select(date, day, state, state_name, pop, new_cases, new_tests, new_death, hosp, percent_pos, lean_avg, state_lean, SLPLI, party_by, slpli_party, governor_party,
+         gov_party, pvi, pvi_party, mask_law, mask_date)
+
 save(covid_pol, file = "rda/covid_pol.rda")
-
-
-  
