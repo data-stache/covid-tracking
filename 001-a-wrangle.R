@@ -1,3 +1,6 @@
+# CLEAR ENVIRONS
+rm(list=ls())
+
 ##### PULL IN POPULATION DATA ####
 populations <- read.csv("data/us-census-population-data.csv")
 populations <- populations %>%
@@ -225,4 +228,7 @@ save(ind_red_cases, file = "rda/ind_red_cases.rda")
 
 # COVID TACKING PROJECT DATA LAST UPDATED
 ind_tdy
+
+# CLEAR ENVIRONS
+rm(list=ls())
 

@@ -24,6 +24,7 @@ covid_us_sum %>%
   kable()
 
 covid_us_sum %>%
+  filter(date >= ymd(20200801)) %>%
   mutate(week = epiweek(date)) %>%
   group_by(week, day) %>%
   summarize(cases = sum(new_cases),
@@ -32,13 +33,13 @@ covid_us_sum %>%
             hosp = mean(cur_hosp, na.rm = TRUE)) %>%
   gather(metric, total, cases:hosp) %>%
   ungroup() %>%
-  filter(day == d & !metric %in% c('deaths', 'tests')) %>%
+  filter(day == d & !metric %in% c('deaths')) %>%
   group_by(metric) %>%
   arrange(desc(week)) %>%
   mutate(change = rollapply(total, width=2, FUN=function(x) (x[1] - x[2]) / x[2] * 100, fill = NA, align="left"),
          week = ymd(20200105) + weeks(week-2),
-         metric = factor(metric, levels = c('cases', 'hosp'),
-                         labels = c('Weekly Percent Change: Newly Reported Cases', 'Weekly Percent Change: Current Hospitalization'))) %>%
+         metric = factor(metric, levels = c('cases', 'hosp', 'tests'),
+                         labels = c('Weekly Percent Change: Newly Reported Cases', 'Weekly Percent Change: Current Hospitalization', 'Weekly Percent Change: Testing'))) %>%
   ungroup() %>%
   ggplot() +
   geom_hline(yintercept = 0, col = 'grey60') +

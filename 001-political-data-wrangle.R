@@ -2,6 +2,9 @@ library(tidyverse)
 library(stringr)
 library(lubridate)
 
+# CLEAR ENVIRONS
+rm(list=ls())
+
 ##### PULL POLITICAL DATA ####
 slpli <- read.csv("data/slpli-and-party.csv")
 governors <- read.csv("data/gov-party.csv")
@@ -84,3 +87,6 @@ covid_pol <- covid_pol %>%
          gov_party, pvi, pvi_party, mask_law, mask_date)
 
 save(covid_pol, file = "rda/covid_pol.rda")
+
+# CLEAR ENVIRONS
+rm(list=ls())
