@@ -65,6 +65,7 @@ p_percent_pos <- covid %>%
   mutate(percent_pos = percent_pos * 100,
          percent_pos_07da = percent_pos_07da * 100) %>%
   ggplot(aes(date, percent_pos)) +
+  geom_hline(yintercept = 5, col = "red", alpha = .7, size = .25) +
   geom_bar(stat = "identity", fill="deepskyblue4", alpha = .3, size = .1) +
   scale_color_manual(values="light grey") +
   geom_line(aes(y = percent_pos_07da), size = .25, col="deepskyblue4") +

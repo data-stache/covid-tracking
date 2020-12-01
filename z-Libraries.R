@@ -6,6 +6,7 @@ library(lubridate)
 library(janitor)
 library(caret)
 library(knitr)
+library(tidylog)
 
 library(ggplot2)
 library(gghighlight)

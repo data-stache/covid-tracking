@@ -477,7 +477,8 @@ ggsave("figs/state-lean-hospitalization-box-plot.png",
 
 ##### TIME SERIES PLOTS #####
 # CASES
-covid_pol %>%
+P_cases <- covid_pol %>%
+  filter(date >= ymd(20200301)) %>%
   group_by(state_lean, date) %>%
   summarize(cases = sum(new_cases) / sum(unique(pop)) * 100000) %>%
   mutate(cases = rollapply(cases, width = 7, FUN=function(x) mean(x, na.rm=TRUE), by=1, by.column=TRUE, partial=TRUE, fill=NA, align="right")) %>%
@@ -486,12 +487,14 @@ covid_pol %>%
   geom_line() +
   scale_color_manual(values = pol_party) +
   theme_DataStache() +
-  ggtitle("Does Political Leaning Impact New Case Load (Entire Pandemic)") +
+  ggtitle("Does Political Leaning Impact Covid Cases") +
   labs(caption = "Created by Andrew F. Griffin\nData The Covid Tracking Project",
-       subtitle = "Lean based on FiveThirtyEight SLPLI and Cook PVI")
+       subtitle = "Cases Per 100k People in Democratic vs Republican Leaning States\nLean based on FiveThirtyEight SLPLI and Cook PVI")
+P_cases
 
 # DEATHS
-covid_pol %>%
+P_deaths <- covid_pol %>%
+  filter(date >= ymd(20200301)) %>%
   group_by(state_lean, date) %>%
   summarize(deaths = sum(new_death) / sum(unique(pop)) * 100000) %>%
   mutate(deaths = rollapply(deaths, width = 7, FUN=function(x) mean(x, na.rm=TRUE), by=1, by.column=TRUE, partial=TRUE, fill=NA, align="right")) %>%
@@ -500,12 +503,14 @@ covid_pol %>%
   geom_line() +
   scale_color_manual(values = pol_party) +
   theme_DataStache() +
-  ggtitle("Does Political Leaning Impact New Case Load (Entire Pandemic)") +
+  ggtitle("Does Political Leaning Impact Covid Deaths") +
   labs(caption = "Created by Andrew F. Griffin\nData The Covid Tracking Project",
-       subtitle = "Lean based on FiveThirtyEight SLPLI and Cook PVI")
+       subtitle = "Deaths Per 100k People in Democratic vs Republican Leaning States\nLean based on FiveThirtyEight SLPLI and Cook PVI")
+P_deaths
 
 # TESTING
-covid_pol %>%
+P_tests <- covid_pol %>%
+  filter(date >= ymd(20200301)) %>%
   group_by(state_lean, date) %>%
   summarize(tests = sum(new_tests) / sum(unique(pop)) * 100000) %>%
   mutate(tests = rollapply(tests, width = 7, FUN=function(x) mean(x, na.rm=TRUE), by=1, by.column=TRUE, partial=TRUE, fill=NA, align="right")) %>%
@@ -514,12 +519,14 @@ covid_pol %>%
   geom_line() +
   scale_color_manual(values = pol_party) +
   theme_DataStache() +
-  ggtitle("Does Political Leaning Impact New Case Load (Entire Pandemic)") +
+  ggtitle("Does Political Leaning Impact Covid Testing") +
   labs(caption = "Created by Andrew F. Griffin\nData The Covid Tracking Project",
-       subtitle = "Lean based on FiveThirtyEight SLPLI and Cook PVI")
+       subtitle = "Tests Per 100k People in Democratic vs Republican Leaning States\nLean based on FiveThirtyEight SLPLI and Cook PVI")
+P_tests
 
 # POSITIVE
 covid_pol %>%
+  filter(date >= ymd(20200301)) %>%
   group_by(state_lean, date) %>%
   summarize(pos = sum(new_cases, na.rm = TRUE) / sum(new_tests, na.rm = TRUE)) %>%
   mutate(pos = rollapply(pos, width = 7, FUN=function(x) mean(x, na.rm=TRUE), by=1, by.column=TRUE, partial=TRUE, fill=NA, align="right")) %>%
@@ -531,6 +538,8 @@ covid_pol %>%
   ggtitle("Does Political Leaning Impact New Case Load (Entire Pandemic)") +
   labs(caption = "Created by Andrew F. Griffin\nData The Covid Tracking Project",
        subtitle = "Lean based on FiveThirtyEight SLPLI and Cook PVI")
+
+grid.arrange(P_cases, P_tests, P_deaths, nrow = 1)
 
 
 

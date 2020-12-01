@@ -1,6 +1,9 @@
 library(tidyverse)
 library(caret)
 library(broom)
+library(lubridate)
+library(zoo)
+library(tidylog)
 
 load("rda/covid.rda")
 load("rda/weather.rda")

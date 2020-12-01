@@ -2,6 +2,10 @@ load("rda/covid_us_sum.rda")
 load("rda/theme_DataStache.rda")
 options(scipen = 999)
 
+library(tidyverse)
+library(lubridate)
+library(tidylog)
+
 head(covid_us_sum)
 
 dat <- covid_us_sum %>%

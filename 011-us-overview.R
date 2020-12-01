@@ -6,6 +6,7 @@ load("rda/covid_us_growth.rda")
 load("rda/ind_tywm_date.rda")
 load("rda/covid_state_zones.rda")
 
+library(knitr)
 #### US DAILY STATS ####
 length(ind_red_perpos)
 

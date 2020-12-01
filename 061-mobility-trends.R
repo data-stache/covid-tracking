@@ -73,7 +73,7 @@ dat %>%
   geom_smooth()
 
 dat %>%
-  ggplot(aes(x=date, y=grocery_pharmacy_07da, col = state)) +
+  ggplot(aes(x=date, y=residential_07da, col = state)) +
   geom_line() +
   facet_wrap(.~mask_law)
 

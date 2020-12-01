@@ -1,6 +1,11 @@
 load("rda/covid_us_sum.rda")
 options(digits = 3)
 
+library(tidyverse)
+library(zoo)
+library(lubridate)
+library(tidylog)
+
 deaths <- covid_us_sum %>%
   filter(date >= ymd(20201001)) %>%
   mutate(week = epiweek(date),
@@ -107,7 +112,7 @@ this_week <- data.frame(Day, Date, Low, Model, High, Actual) %>%
          hi_miss = ifelse(hit == FALSE, ifelse(Actual < Low, NA, (Actual - High) / High), NA))
 
 ##### MODEL OUTPUT #####
-
+library(knitr)
 this_week %>%
   kable()
 
