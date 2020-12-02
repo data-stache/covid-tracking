@@ -1,3 +1,8 @@
+library(tidyverse)
+library(zoo)
+library(lubridate)
+library(tidylog)
+
 # LOAD DATA
 load("rda/covid.rda")
 load("rda/ind_tdy.rda")

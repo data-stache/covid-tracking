@@ -6,6 +6,9 @@ load("rda/ind_xlim_3m.rda")
 load("rda/theme_DataStache.rda")
 options(digits = 3)
 
+library(ggplot2)
+library(ggthemes)
+
 ## NEW CASES ALL
 covid_grid_cases <- covid
 new_case_order <- as.character(covid_state_growth$state[ind_new_case_state])
