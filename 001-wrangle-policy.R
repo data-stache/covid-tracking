@@ -9,10 +9,9 @@ policy <- read.csv('data/usa-covid-policy-by-state.csv') %>%
   mutate(Date = ymd(Date)) %>%
   arrange(desc(Date)) %>%
   filter(!RegionName == '' & !RegionName == 'Virgin Islands') %>%
-  select(RegionName, RegionCode, Date,
+  select(RegionCode, Date,
          StringencyIndexForDisplay, GovernmentResponseIndexForDisplay, ContainmentHealthIndexForDisplay, EconomicSupportIndexForDisplay) %>%
-  rename(state_name = RegionName,
-         state = RegionCode,
+  rename(state = RegionCode,
          date = Date,
          stringency_index = StringencyIndexForDisplay,
          government_index = GovernmentResponseIndexForDisplay,

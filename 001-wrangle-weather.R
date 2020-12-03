@@ -1727,12 +1727,14 @@ weather_usa <- rbind(weather_usa, weather_DC)
 
 
 ##### PROCESS ALL DATA #####
-weather_usa %>%
-  arrange(date)
-save(weather_usa, file = "rda/weather_usa.rda")
-
-weather_usa %>%
-  filter(date <= ymd(20201031)) %>%
+weather_usa <- weather_usa %>%
+  filter(!is.na(tavg)) %>%
   arrange(desc(date))
 
+save(weather_usa, file = "rda/weather_usa.rda")
 
+# Check State Counts
+weather_usa %>%
+  group_by(date) %>%
+  summarize(sum = n()) %>%
+  arrange(desc(date))
