@@ -356,7 +356,8 @@ covid_pol %>%
             lean = unique(state_lean)) %>%
   ungroup() %>%
   mutate(bx_month = paste(month, lean, sep = ""),
-         bx_month = factor(bx_month, levels = c("MarD", "MarR", "AprD", "AprR","MayD", 'MayR', 'JunD', 'JunR', 'JulD', 'JulR', 'AugD', 'AugR', 'SepD', 'SepR', 'OctD', 'OctR', 'NovD', 'NovR'))) %>%
+         bx_month = factor(bx_month, levels = c("MarD", "MarR", "AprD", "AprR","MayD", 'MayR', 'JunD', 'JunR', 'JulD', 'JulR', 'AugD', 'AugR',
+                                                'SepD', 'SepR', 'OctD', 'OctR', 'NovD', 'NovR', 'DecD', 'DecR'))) %>%
   ggplot(aes(x = bx_month, y = cases, fill = lean)) +
   geom_hline(yintercept = 0, col = "grey 60", size = .5) +
   geom_boxplot(aes(group = bx_month), alpha = .5) +
@@ -388,7 +389,8 @@ covid_pol %>%
             lean = unique(state_lean)) %>%
   ungroup() %>%
   mutate(bx_month = paste(month, lean, sep = ""),
-         bx_month = factor(bx_month, levels = c("MarD", "MarR", "AprD", "AprR","MayD", 'MayR', 'JunD', 'JunR', 'JulD', 'JulR', 'AugD', 'AugR', 'SepD', 'SepR', 'OctD', 'OctR', 'NovD', 'NovR'))) %>%
+         bx_month = factor(bx_month, levels = c("MarD", "MarR", "AprD", "AprR","MayD", 'MayR', 'JunD', 'JunR', 'JulD', 'JulR', 'AugD', 'AugR',
+                                                'SepD', 'SepR', 'OctD', 'OctR', 'NovD', 'NovR', 'DecD', 'DecR'))) %>%
   ggplot(aes(x = bx_month, y = death, fill = lean)) +
   geom_hline(yintercept = 0, col = "grey 60", size = .5) +
   geom_boxplot(aes(group = bx_month), alpha = .5) +
@@ -420,7 +422,8 @@ covid_pol %>%
             lean = unique(state_lean)) %>%
   ungroup() %>%
   mutate(bx_month = paste(month, lean, sep = ""),
-         bx_month = factor(bx_month, levels = c("MarD", "MarR", "AprD", "AprR","MayD", 'MayR', 'JunD', 'JunR', 'JulD', 'JulR', 'AugD', 'AugR', 'SepD', 'SepR', 'OctD', 'OctR', 'NovD', 'NovR'))) %>%
+         bx_month = factor(bx_month, levels = c("MarD", "MarR", "AprD", "AprR","MayD", 'MayR', 'JunD', 'JunR', 'JulD', 'JulR', 'AugD', 'AugR',
+                                                'SepD', 'SepR', 'OctD', 'OctR', 'NovD', 'NovR', 'DecD', 'DecR'))) %>%
   ggplot(aes(x = bx_month, y = tests, fill = lean)) +
   geom_hline(yintercept = 0, col = "grey 60", size = .5) +
   geom_boxplot(aes(group = bx_month), alpha = .5) +
@@ -452,7 +455,8 @@ covid_pol %>%
             lean = unique(state_lean)) %>%
   ungroup() %>%
   mutate(bx_month = paste(month, lean, sep = ""),
-         bx_month = factor(bx_month, levels = c("MarD", "MarR", "AprD", "AprR","MayD", 'MayR', 'JunD', 'JunR', 'JulD', 'JulR', 'AugD', 'AugR', 'SepD', 'SepR', 'OctD', 'OctR', 'NovD', 'NovR'))) %>%
+         bx_month = factor(bx_month, levels = c("MarD", "MarR", "AprD", "AprR","MayD", 'MayR', 'JunD', 'JunR', 'JulD', 'JulR', 'AugD', 'AugR',
+                                                'SepD', 'SepR', 'OctD', 'OctR', 'NovD', 'NovR', 'DecD', 'DecR'))) %>%
   ggplot(aes(x = bx_month, y = hosp, fill = lean)) +
   geom_hline(yintercept = 0, col = "grey 60", size = .5) +
   geom_boxplot(aes(group = bx_month), alpha = .5) +
@@ -539,6 +543,7 @@ covid_pol %>%
   labs(caption = "Created by Andrew F. Griffin\nData The Covid Tracking Project",
        subtitle = "Lean based on FiveThirtyEight SLPLI and Cook PVI")
 
+library(gridExtra)
 grid.arrange(P_cases, P_tests, P_deaths, nrow = 1)
 
 

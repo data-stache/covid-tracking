@@ -199,6 +199,27 @@ rmse_results <- bind_rows(rmse_results,
                                      RMSE = model_2_rmse ))
 rmse_results %>% knitr::kable()
 
+### START AT REGULARIZING DATA
+#lambdas <- seq(0, 10, .25)
+#mu <- mean(train_set$new_cases)
+#just_the_sum <- train_set %>% 
+#  group_by(tavg_strata) %>% 
+#  summarize(s = sum(new_cases - mu),
+#            n_i = n())
+
+#just_the_sum %>%
+#  arrange(tavg_strata)
+
+#rmses <- sapply(lambdas, function(lambda){
+#  predicted_new_cases <- train_set %>% 
+#    left_join(just_the_sum, by='tavg_strata') %>% 
+#    mutate(b_i = s / (n_i + lambda)) %>%
+#    mutate(pred = mu + b_i) %>%
+#    .$pred
+#  return(RMSE(predicted_new_cases, train_set$new_cases))
+#})
+#qplot(lambdas, rmses)  
+#lambdas[which.min(rmses)]
 
 ### ADD POLICY MEAN STRATA
 policy_avg <- train_set %>% 
