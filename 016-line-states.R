@@ -6,7 +6,7 @@ library(tidylog)
 # LOAD DATA
 load("rda/covid.rda")
 load("rda/ind_tdy.rda")
-load("rda/theme_DataStache.rda")
+load("/Users/andrewgriffin/projects/zConstants/rda/theme_DataStache.rda")
 options(digits = 3)
 
 # EPIC LINEPLOT OF COVID - FULL PANDEMIC

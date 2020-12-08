@@ -4,7 +4,7 @@ library(broom)
 library(ggrepel)
 library(tidyverse)
 load("rda/covid_pol.rda")
-load("rda/theme_DataStache.rda")
+load("/Users/andrewgriffin/projects/zConstants/rda/theme_DataStache.rda")
 
 options(scipen = 999)
 
@@ -34,7 +34,7 @@ covid_pol %>%
   geom_text_repel() +
   geom_smooth(method = "lm") +
   theme_DataStache() +
-  ggtitle("Does Political Leaning Impact New Case Load (Entire Pandemic)") +
+  ggtitle("Does Political Leaning Impact New Case Load") +
   labs(caption = "Created by Andrew F. Griffin\nData The Covid Tracking Project",
        subtitle = "Lean based on FiveThirtyEight SLPLI and Cook PVI")
 
@@ -155,7 +155,7 @@ ggsave("figs/state-lean-hospitalization.png",
 
 
 ##### STATE LEAN -- GRAPHS PICK A MONTH #####
-mth <- 'Nov'
+mth <- 'Dec'
 
 # CASES
 covid_pol %>%
@@ -529,7 +529,7 @@ P_tests <- covid_pol %>%
 P_tests
 
 # POSITIVE
-covid_pol %>%
+P_pos <- covid_pol %>%
   filter(date >= ymd(20200301)) %>%
   group_by(state_lean, date) %>%
   summarize(pos = sum(new_cases, na.rm = TRUE) / sum(new_tests, na.rm = TRUE)) %>%
@@ -539,12 +539,17 @@ covid_pol %>%
   geom_line() +
   scale_color_manual(values = pol_party) +
   theme_DataStache() +
-  ggtitle("Does Political Leaning Impact New Case Load (Entire Pandemic)") +
+  ggtitle("Does Political Leaning Impact Percent Positive") +
   labs(caption = "Created by Andrew F. Griffin\nData The Covid Tracking Project",
        subtitle = "Lean based on FiveThirtyEight SLPLI and Cook PVI")
 
 library(gridExtra)
-grid.arrange(P_cases, P_tests, P_deaths, nrow = 1)
+grid.arrange(P_cases, P_tests, P_deaths, P_pos, nrow = 2)
+G <- arrangeGrob(P_cases, P_tests, P_deaths, P_pos, nrow = 2)
 
-
+ggsave("figs/state-lean-time-series.png",
+       G,
+       width = p_width,
+       height = p_height, 
+       dpi = "retina")
 

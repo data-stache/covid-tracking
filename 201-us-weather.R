@@ -4,7 +4,7 @@ library(lubridate)
 library(zoo)
 
 load("rda/covid.rda")
-load("rda/weather.rda")
+load("rda/weather_usa.rda")
 load("rda/ind_red_cases.rda")
 load("rda/theme_DataStache.rda")
 
@@ -23,6 +23,52 @@ dat <- covid %>%
   group_by(state) %>%
   mutate(cases = rollapply(new_cases_percap, width = 7, FUN=function(x) mean(x, na.rm=TRUE), by=1, by.column=TRUE, partial=TRUE, fill=NA, align="left"),
          temp = rollapply(tavg, width = 7, FUN=function(x) mean(x, na.rm=TRUE), by=1, by.column=TRUE, partial=TRUE, fill=NA, align="right"))
+
+# NATIONAL TEMP TRENDS
+dat %>%
+  filter(date >= ymd(20200501)) %>%
+  ggplot(aes(x = temp, y = cases)) +
+  geom_hline(yintercept = 0, size = .25 , col = "grey40") +
+  geom_point(size = .5, alpha = .5) +
+  geom_smooth(method = 'loess') +
+  ggtitle('Impact of 7 Day Temperature Average on New Covid Cases in Connecticut') +
+  labs(caption = 'Created by Andrew F. Griffin\nData: NOAA and data.ct.gov') +
+  scale_y_continuous(breaks = seq(0, 5000, 500)) +
+  scale_x_continuous(breaks = seq(0, 100, 10)) +
+  coord_cartesian(expand = FALSE, xlim = c(min(dat$temp) * .99, max(dat$temp) * 1.01)) +
+  theme_DataStache() +
+  theme(axis.title = element_text(size = rel(.8)))
+
+p_width <- 9
+p_height <- (9/16) * p_width
+ggsave(paste("figs/ct-weather-infection-regression-", tdy_date, ".png", sep = ''),
+       width = p_width,
+       height = p_height,
+       dpi = "retina")
+
+# STATE TEMP TRENDS
+st <- 'DE'
+
+dat %>%
+  filter(date >= ymd(20200501)) %>%
+  ggplot(aes(x = temp, y = cases)) +
+  geom_hline(yintercept = 0, size = .25 , col = "grey40") +
+  geom_point(size = .5, alpha = .5) +
+  geom_smooth(method = 'loess') +
+  ggtitle('Impact of 7 Day Temperature Average on New Covid Cases in Connecticut') +
+  labs(caption = 'Created by Andrew F. Griffin\nData: NOAA and data.ct.gov') +
+  scale_y_continuous(breaks = seq(0, 5000, 500)) +
+  scale_x_continuous(breaks = seq(0, 100, 10)) +
+  theme_DataStache() +
+  theme(axis.title = element_text(size = rel(.8))) +
+  facet_wrap(. ~ state, scales = 'free_y')
+
+p_width <- 9
+p_height <- (9/16) * p_width
+ggsave(paste("figs/ct-weather-infection-regression-", tdy_date, ".png", sep = ''),
+       width = p_width,
+       height = p_height,
+       dpi = "retina")
 
 
 ##### REGRESSION ANALYTICS #####

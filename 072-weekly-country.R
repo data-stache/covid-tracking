@@ -6,6 +6,8 @@ options(scipen = 999)
 load('rda/covid_us_sum.rda')
 load('rda/theme_DataStache.rda')
 
+tdy_date <- covid_us_sum$date[1]
+
 covid_weekly <- covid_us_sum %>%
   filter(date >= ymd(20200301)) %>%
   mutate(week = epiweek(date)) %>%
@@ -149,7 +151,7 @@ P <- arrangeGrob(p_Cases, p_Tests, p_Hosp, p_Death, nrow = 1)
 p_width <- 6
 p_height <- (9/16) * p_width 
 
-ggsave("figs/Weekly Sum.png",
+ggsave(paste("figs/weekly-percent-change-", tdy_date, ".png", sep = ''),
        P,
        width = p_width,
        height = p_height,

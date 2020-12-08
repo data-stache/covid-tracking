@@ -6,6 +6,8 @@ options(scipen = 999)
 load('rda/covid.rda')
 load('rda/theme_DataStache.rda')
 
+tdy_date <- covid_us_sum$date[1]
+
 names(covid)
 
 covid_us_weekly <- covid %>%
@@ -149,7 +151,7 @@ weekly_summary_function <- function(st) {
   p_width <- 6
   p_height <- (9/16) * p_width 
 
-  ggsave(paste('figs/', st, 'Weekly Sum.png'),
+  ggsave(paste('figs/', st, '-percent-change-', tdy_date, '.png', sep = ''),
          P,
          width = p_width,
          height = p_height,

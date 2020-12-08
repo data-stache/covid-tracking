@@ -2,7 +2,7 @@
 # LOAD DATA
 load("rda/covid_us_sum.rda")
 load("rda/covid_us_growth.rda")
-load("rda/theme_DataStache.rda")
+load("/Users/andrewgriffin/projects/zConstants/rda/theme_DataStache.rda")
 options(scipen = 999)
 
 tdy_date <- covid_us_sum$date[1]

@@ -5,7 +5,7 @@ load("rda/theme_DataStache.rda")
 options(digits = 3)
 
 ## Pick State (ABB)
-st <- c('DE', 'CT')
+st <- c('ND', 'SD')
 state <- populations %>% filter(state %in% st) %>% .$state_name
 
 library(gghighlight)

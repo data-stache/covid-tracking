@@ -3,7 +3,7 @@ load("rda/covid.rda")
 load("rda/ind_new_case_state.rda")
 load("rda/covid_state_growth.rda")
 load("rda/ind_xlim_3m.rda")
-load("rda/theme_DataStache.rda")
+load("/Users/andrewgriffin/projects/zConstants/rda/theme_DataStache.rda")
 options(digits = 3)
 
 library(ggplot2)

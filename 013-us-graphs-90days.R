@@ -72,6 +72,7 @@ p_US_hosp <- covid_us_sum %>%
   theme_DataStache() +
   theme(text = element_text(size = rel(.6)))
 
+library(gridExtra)
 grid.arrange(p_US_new_case_plot, p_US_new_test_plot, p_US_new_deaths_plot, p_US_hosp, nrow=1)
 
 # GRID PRINT PLOTS
