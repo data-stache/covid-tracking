@@ -542,6 +542,7 @@ P_pos <- covid_pol %>%
   ggtitle("Does Political Leaning Impact Percent Positive") +
   labs(caption = "Created by Andrew F. Griffin\nData The Covid Tracking Project",
        subtitle = "Lean based on FiveThirtyEight SLPLI and Cook PVI")
+P_pos
 
 library(gridExtra)
 grid.arrange(P_cases, P_tests, P_deaths, P_pos, nrow = 2)
