@@ -108,6 +108,7 @@ p_new_hosp <- covid %>%
   theme_DataStache() +
   theme(text = element_text(size = rel(.6)))
 
+library(gridExtra)
 # GRID ARRANGE PLOTS
 grid.arrange(p_new_case, p_new_test, p_hosp, p_new_deaths, p_percent_pos, p_new_hosp, nrow = 2)
 

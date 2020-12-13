@@ -1,4 +1,5 @@
 load("rda/covid_us_sum.rda")
+load("/Users/andrewgriffin/projects/zConstants/rda/theme_DataStache.rda")
 options(digits = 3)
 
 library(tidyverse)
@@ -124,3 +125,14 @@ this_week %>%
             model_sum = sum(Model),
             high_sum = sum(High)) %>%
   kable()
+
+# Graph of Model
+this_week %>%
+  ggplot(aes(x = factor(Day, levels = c('Mon', 'Tues', 'Wed', 'Thurs', 'Fri', 'Sat', 'Sun')))) +
+  geom_ribbon(aes(ymin = Low, ymax = High, group = 1), fill = 'red', alpha = .3) +
+  geom_line(aes(y = Model, group = 1), size = .6, col = 'red') +
+  geom_line(aes(y = Low, group = 1), size = .2, col = 'red') +
+  geom_line(aes(y = High, group = 1), size = .2, col = 'red') +
+  geom_point(aes(y = Actual), col = 'darkblue', size = 1) +
+  ggtitle(paste('Forecasted vs Actual Deaths: Week of ', sun$date, sep = '')) +
+  theme_DataStache()
