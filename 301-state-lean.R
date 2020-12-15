@@ -481,6 +481,13 @@ ggsave("figs/state-lean-hospitalization-box-plot.png",
 
 ##### TIME SERIES PLOTS #####
 # CASES
+dat_ends <- covid_pol %>%
+  filter(date >= ymd(20200301)) %>%
+  group_by(state_lean, date) %>%
+  summarize(cases = sum(new_cases) / sum(unique(pop)) * 100000) %>%
+  mutate(cases = rollapply(cases, width = 7, FUN=function(x) mean(x, na.rm=TRUE), by=1, by.column=TRUE, partial=TRUE, fill=NA, align="right")) %>%
+  filter(date == max(date))
+
 P_cases <- covid_pol %>%
   filter(date >= ymd(20200301)) %>%
   group_by(state_lean, date) %>%
@@ -489,6 +496,8 @@ P_cases <- covid_pol %>%
   ggplot(aes(x = date, y = cases, col = state_lean)) +
   geom_hline(yintercept = 0, size = .5, col = "40grey") +
   geom_line() +
+  geom_point(aes(y = cases), data = dat_ends) +
+  geom_text(aes(label = round(cases, 1)), data = dat_ends, nudge_x = 3, hjust = 0) +
   scale_color_manual(values = pol_party) +
   theme_DataStache() +
   ggtitle("Does Political Leaning Impact Covid Cases") +
@@ -497,6 +506,13 @@ P_cases <- covid_pol %>%
 P_cases
 
 # DEATHS
+dat_ends <- covid_pol %>%
+  filter(date >= ymd(20200301)) %>%
+  group_by(state_lean, date) %>%
+  summarize(deaths = sum(new_death) / sum(unique(pop)) * 100000) %>%
+  mutate(deaths = rollapply(deaths, width = 7, FUN=function(x) mean(x, na.rm=TRUE), by=1, by.column=TRUE, partial=TRUE, fill=NA, align="right")) %>%
+  filter(date == max(date))
+
 P_deaths <- covid_pol %>%
   filter(date >= ymd(20200301)) %>%
   group_by(state_lean, date) %>%
@@ -505,6 +521,8 @@ P_deaths <- covid_pol %>%
   ggplot(aes(x = date, y = deaths, col = state_lean)) +
   geom_hline(yintercept = 0, size = .5, col = "40grey") +
   geom_line() +
+  geom_point(aes(y = deaths), data = dat_ends) +
+  geom_text(aes(label = round(deaths, 1)), data = dat_ends, nudge_x = 3, hjust = 0) +
   scale_color_manual(values = pol_party) +
   theme_DataStache() +
   ggtitle("Does Political Leaning Impact Covid Deaths") +
@@ -513,6 +531,13 @@ P_deaths <- covid_pol %>%
 P_deaths
 
 # TESTING
+dat_ends <- covid_pol %>%
+  filter(date >= ymd(20200301)) %>%
+  group_by(state_lean, date) %>%
+  summarize(tests = sum(new_tests) / sum(unique(pop)) * 100000) %>%
+  mutate(tests = rollapply(tests, width = 7, FUN=function(x) mean(x, na.rm=TRUE), by=1, by.column=TRUE, partial=TRUE, fill=NA, align="right")) %>%
+  filter(date == max(date))
+
 P_tests <- covid_pol %>%
   filter(date >= ymd(20200301)) %>%
   group_by(state_lean, date) %>%
@@ -521,6 +546,8 @@ P_tests <- covid_pol %>%
   ggplot(aes(x = date, y = tests, col = state_lean)) +
   geom_hline(yintercept = 0, size = .5, col = "40grey") +
   geom_line() +
+  geom_point(aes(y = tests), data = dat_ends) +
+  geom_text(aes(label = round(tests, 1)), data = dat_ends, nudge_x = 3, hjust = 0) +
   scale_color_manual(values = pol_party) +
   theme_DataStache() +
   ggtitle("Does Political Leaning Impact Covid Testing") +
@@ -529,6 +556,13 @@ P_tests <- covid_pol %>%
 P_tests
 
 # POSITIVE
+dat_ends <- covid_pol %>%
+  filter(date >= ymd(20200301)) %>%
+  group_by(state_lean, date) %>%
+  summarize(pos = sum(new_cases, na.rm = TRUE) / sum(new_tests, na.rm = TRUE)) %>%
+  mutate(pos = rollapply(pos, width = 7, FUN=function(x) mean(x, na.rm=TRUE), by=1, by.column=TRUE, partial=TRUE, fill=NA, align="right")) %>%
+  filter(date == max(date))
+
 P_pos <- covid_pol %>%
   filter(date >= ymd(20200301)) %>%
   group_by(state_lean, date) %>%
@@ -536,8 +570,14 @@ P_pos <- covid_pol %>%
   mutate(pos = rollapply(pos, width = 7, FUN=function(x) mean(x, na.rm=TRUE), by=1, by.column=TRUE, partial=TRUE, fill=NA, align="right")) %>%
   ggplot(aes(x = date, y = pos, col = state_lean)) +
   geom_hline(yintercept = 0, size = .5, col = "40grey") +
+  geom_ribbon(aes(ymin = 0, ymax = .05), fill = 'green', alpha = .3) +
+#  geom_ribbon(aes(ymin = .05, ymax = .1), fill = 'yellow', alpha = .3) +
+#  geom_ribbon(aes(ymin = .1, ymax = 1), fill = 'red4', alpha = .3) +
   geom_line() +
+  geom_point(aes(y = pos), data = dat_ends) +
+  geom_text(aes(label = round(pos, 2)), data = dat_ends, nudge_x = 3, hjust = 0) +
   scale_color_manual(values = pol_party) +
+  coord_cartesian(ylim = c(0, .3)) +
   theme_DataStache() +
   ggtitle("Does Political Leaning Impact Percent Positive") +
   labs(caption = "Created by Andrew F. Griffin\nData The Covid Tracking Project",

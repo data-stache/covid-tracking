@@ -4,7 +4,7 @@ library(gridExtra)
 options(scipen = 999)
 
 load('rda/covid.rda')
-load('rda/theme_DataStache.rda')
+load("/Users/andrewgriffin/projects/zConstants/rda/theme_DataStache.rda")
 
 tdy_date <- covid_us_sum$date[1]
 
@@ -46,7 +46,7 @@ weekly_summary_function <- function(st) {
   p_Cases <- covid_weekly %>%
     ggplot(aes(x = date, y = new_cases)) +
     geom_col(fill = 'red4') +
-    ggtitle(paste(st, 'Weekly Cases - Week Beginning', month(max_date, label = TRUE), day(max_date)),
+    ggtitle(paste(st, 'Weekly Cases\nWeek Beginning', month(max_date, label = TRUE), day(max_date)),
             subtitle = paste(ifelse(change > 0, '+', ''), change, '% From Last Week', sep = '')) +
     scale_x_date(breaks = function(x) seq.Date(from = min_date, 
                                                to = max_date, 
@@ -57,13 +57,14 @@ weekly_summary_function <- function(st) {
     theme_DataStache() +
     coord_cartesian(ylim = c(0,NA), expand = FALSE) +
     geom_hline(yintercept = 0, size = .25 , col = "grey40") +
-    theme(plot.title = element_text(size = rel(.4), hjust = .5),
+    theme(plot.title = element_text(size = rel(.5), hjust = .5),
           plot.subtitle = element_text(size = rel(.5), face = 'bold',
                                        hjust = .5,
                                        vjust = 1.5, colour = 'red4'),
-          axis.text = element_text(size = rel(.4),
-                                   face = "bold"),
-          axis.text.x = element_text(angle = 90),
+          axis.text.y = element_text(size = rel(1),
+                                     face = "bold"),
+          axis.text.x = element_text(size = rel(.8),
+                                     angle = 90),
           panel.grid.major.x = element_blank(),
           plot.margin = unit(c(.1, .2, .1, .2), "cm"))
 
@@ -72,7 +73,7 @@ weekly_summary_function <- function(st) {
   p_Tests <- covid_weekly %>%
     ggplot(aes(x = date, y = new_tests)) +
     geom_col(fill = 'magenta4') +
-    ggtitle(paste(st, 'Weekly Tests - Week Beginning', month(max_date, label = TRUE), day(max_date)),
+    ggtitle(paste(st, 'Weekly Tests\nWeek Beginning', month(max_date, label = TRUE), day(max_date)),
             subtitle = paste(ifelse(change > 0, '+', ''), change, '% From Last Week', sep = '')) +
     scale_x_date(breaks = function(x) seq.Date(from = min_date, 
                                                to = max_date, 
@@ -83,13 +84,14 @@ weekly_summary_function <- function(st) {
     theme_DataStache() +
     coord_cartesian(ylim = c(0,NA), xlim = c(ymd(20200329), NA), expand = FALSE) +
     geom_hline(yintercept = 0, size = .25 , col = "grey40") +
-    theme(plot.title = element_text(size = rel(.4), hjust = .5),
+    theme(plot.title = element_text(size = rel(.5), hjust = .5),
           plot.subtitle = element_text(size = rel(.5), face = 'bold',
                                        hjust = .5,
                                        vjust = 1.5, colour = 'magenta4'),
-          axis.text = element_text(size = rel(.4),
-                                   face = "bold"),
-          axis.text.x = element_text(angle = 90),
+          axis.text.y = element_text(size = rel(1),
+                                     face = "bold"),
+          axis.text.x = element_text(size = rel(.8),
+                                     angle = 90),
           panel.grid.major.x = element_blank(),
           plot.margin = unit(c(.1, .2, .1, .2), "cm"))
 
@@ -98,7 +100,7 @@ weekly_summary_function <- function(st) {
   p_Hosp <- covid_weekly %>%
     ggplot(aes(x = date, y = avg_hos)) +
     geom_col(fill = 'dark blue') +
-    ggtitle(paste(st, 'Avg Hospitalization - Week Beginning', month(max_date, label = TRUE), day(max_date)),
+    ggtitle(paste(st, 'Avg Hospitalization\nWeek Beginning', month(max_date, label = TRUE), day(max_date)),
             subtitle = paste(ifelse(change > 0, '+', ''), change, '% From Last Week', sep = '')) +
     scale_x_date(breaks = function(x) seq.Date(from = min_date, 
                                                to = max_date, 
@@ -109,13 +111,14 @@ weekly_summary_function <- function(st) {
     theme_DataStache() +
     coord_cartesian(ylim = c(0,NA), expand = FALSE, xlim = c(ymd(20200301), NA)) +
     geom_hline(yintercept = 0, size = .25 , col = "grey40") +
-    theme(plot.title = element_text(size = rel(.4), hjust = .5),
+    theme(plot.title = element_text(size = rel(.5), hjust = .5),
           plot.subtitle = element_text(size = rel(.5), face = 'bold',
                                        hjust = .5,
                                        vjust = 1.5, colour = 'dark blue'),
-          axis.text = element_text(size = rel(.4),
-                                   face = "bold"),
-          axis.text.x = element_text(angle = 90),
+          axis.text.y = element_text(size = rel(1),
+                                     face = "bold"),
+          axis.text.x = element_text(size = rel(.8),
+                                     angle = 90),
           panel.grid.major.x = element_blank(),
           plot.margin = unit(c(.1, .2, .1, .2), "cm"))
 
@@ -124,7 +127,7 @@ weekly_summary_function <- function(st) {
   p_Death <- covid_weekly %>%
     ggplot(aes(x = date, y = new_death)) +
     geom_col(fill = 'green4') +
-    ggtitle(paste(st, 'Weekly Death - Week Beginning', month(max_date, label = TRUE), day(max_date)),
+    ggtitle(paste(st, 'Weekly Death\nWeek Beginning', month(max_date, label = TRUE), day(max_date)),
             subtitle = paste(ifelse(change > 0, '+', ''), change, '% From Last Week', sep = '')) +
     scale_x_date(breaks = function(x) seq.Date(from = min_date, 
                                                to = max_date, 
@@ -135,13 +138,14 @@ weekly_summary_function <- function(st) {
     theme_DataStache() +
     coord_cartesian(ylim = c(0,NA), expand = FALSE) +
     geom_hline(yintercept = 0, size = .25 , col = "grey40") +
-    theme(plot.title = element_text(size = rel(.4), hjust = .5),
+    theme(plot.title = element_text(size = rel(.5), hjust = .5),
           plot.subtitle = element_text(size = rel(.5), face = 'bold',
                                        hjust = .5,
                                        vjust = 1.5, colour = 'green4'),
-          axis.text = element_text(size = rel(.4),
-                                   face = "bold"),
-          axis.text.x = element_text(angle = 90),
+          axis.text.y = element_text(size = rel(1),
+                                     face = "bold"),
+          axis.text.x = element_text(size = rel(.8),
+                                     angle = 90),
           panel.grid.major.x = element_blank(),
           plot.margin = unit(c(.1, .2, .1, .2), "cm"))
 
