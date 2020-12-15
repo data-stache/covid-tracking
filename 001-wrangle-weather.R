@@ -1738,3 +1738,5 @@ weather_usa %>%
   group_by(date) %>%
   summarize(sum = n()) %>%
   arrange(desc(date))
+
+length(unique(weather_usa$state))
