@@ -67,7 +67,9 @@ this_week %>%
   kable()
 
 day_no_sun <- c("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday")
+
 # Graph of Model
+library(ggrepel)
 P_this_week <- this_week %>%
   ggplot(aes(x = factor(day, levels = day_no_sun))) +
   geom_ribbon(aes(ymin = low, ymax = high, group = 1), fill = 'red', alpha = .3) +
@@ -76,9 +78,10 @@ P_this_week <- this_week %>%
   geom_line(aes(y = high, group = 1), size = .2, col = 'red4') +
   geom_point(aes(y = model), col = 'red4', size = .5) +
   geom_text(aes(y = model, label = round(model)), nudge_y = 75, size = 1.7) +
-  #  geom_point(aes(y = Actual), col = 'red4', size = .5) +
-  #  ggtitle(paste('Forecasted vs Actual Deaths: Week of ', sun$date, sep = '')) +
-  ggtitle(paste('Forecasted Deaths: Week of ', this_week$date[1], sep = '')) +
+  geom_point(aes(y = actual), col = 'red4', size = .5) +
+  geom_text_repel(aes(y = actual, label = actual), size = 1.7) +
+  ggtitle(paste('Forecasted vs Actual Deaths: Week of ', this_week$date[1], sep = '')) +
+#  ggtitle(paste('Forecasted Deaths: Week of ', this_week$date[1], sep = '')) +
   scale_y_continuous(breaks = seq(0,7000,500)) +
   scale_x_discrete(expand = c(.02, .02)) +
   theme_DataStache()
