@@ -1,3 +1,9 @@
+library(tidyverse)
+library(tidylog)
+library(lubridate)
+library(zoo)
+library(gridExtra)
+
 ##### US FULL PANDEMIC GRAPH #####
 # LOAD DATA
 load("rda/covid_us_sum.rda")

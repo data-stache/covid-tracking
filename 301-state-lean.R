@@ -16,7 +16,7 @@ covid_pol <- covid_pol %>%
 #  filter(date < ymd(20201101)) %>%
   # CHANGE SLPLI TO - DEM and + REP
   # THIN COLUMNS
-  select(date, state, state_name, pop, new_cases, new_tests, new_death, hosp, percent_pos, lean_avg, state_lean, party_by, pvi, mask_law, mask_date) %>%
+  select(date, state, state_name, pop, new_cases, new_tests, new_death, hosp, percent_pos, lean_avg, state_lean, party_by, pvi) %>%
   # MAKE PVI A DECIMAL and Z SCORES
   mutate(cases = new_cases / pop * 100000)
 head(covid_pol)
@@ -481,6 +481,7 @@ ggsave("figs/state-lean-hospitalization-box-plot.png",
 
 ##### TIME SERIES PLOTS #####
 # CASES
+library(zoo)
 dat_ends <- covid_pol %>%
   filter(date >= ymd(20200301)) %>%
   group_by(state_lean, date) %>%
@@ -570,7 +571,7 @@ P_pos <- covid_pol %>%
   mutate(pos = rollapply(pos, width = 7, FUN=function(x) mean(x, na.rm=TRUE), by=1, by.column=TRUE, partial=TRUE, fill=NA, align="right")) %>%
   ggplot(aes(x = date, y = pos, col = state_lean)) +
   geom_hline(yintercept = 0, size = .5, col = "40grey") +
-  geom_ribbon(aes(ymin = 0, ymax = .05), fill = 'green', alpha = .3) +
+#  geom_ribbon(aes(ymin = 0, ymax = .05), fill = 'green', alpha = .3) +
 #  geom_ribbon(aes(ymin = .05, ymax = .1), fill = 'yellow', alpha = .3) +
 #  geom_ribbon(aes(ymin = .1, ymax = 1), fill = 'red4', alpha = .3) +
   geom_line() +

@@ -41,7 +41,7 @@ covid <- data.frame(date = covid$date,
 
 # PER 100K
 covid <- covid %>%
-  mutate(percent_pos = new_cases / new_tests,
+  mutate(percent_pos = ifelse(new_tests != 0, new_cases / new_tests, NA),
          new_cases_percap = new_cases / pop * 100000,
          new_tests_percap = new_tests / pop * 100000,
          new_death_percap = new_death / pop * 100000,
