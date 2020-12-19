@@ -328,3 +328,62 @@ height <- 6
 ggsave(paste("figs/state-grid-death-", tdy_date, ".png", sep = ""),
        width = width,
        dpi = "retina")
+
+
+##### US GRID CASES #####
+# LOAD DATA
+load("rda/covid.rda")
+load('rda/policy.rda')
+load("rda/ind_xlim_3m.rda")
+load("rda/theme_DataStache.rda")
+options(digits = 3)
+
+head(covid)
+head(policy)
+
+policy <- covid %>%
+  filter(!state == 'PR') %>%
+  mutate(state = as.character(state)) %>%
+  select(state, state_name, date, new_cases_percap, new_cases_percap_07da) %>%
+  left_join(policy)
+
+## MEAN HOSPITALIZATION
+
+policy_order <- policy %>%
+  filter(date >= as.Date(date[1] - 6)) %>%
+  group_by(state_name) %>%
+  summarize(pol = mean(mean_index, na.rm = TRUE)) %>%
+  arrange(desc(pol)) %>%
+  .$state_name
+
+p_ALL_states_cases_policy <- policy %>%
+  mutate(state_name = factor(state_name, levels = policy_order)) %>%
+  filter(date >= ymd(20200315)) %>%
+  ggplot(aes(x = date, y = new_cases_percap)) +
+  geom_hline(yintercept=0, col = "grey40", size = .25) +
+  geom_bar(stat = "identity", alpha = .2, size = .1, fill = "darkblue") +
+  geom_line(aes(x = date, y = new_cases_percap_07da), color = "darkblue", size = .25) +
+  geom_line(aes(y = mean_index * 2), color = "red4", size = .5) +
+  scale_y_continuous(sec.axis = sec_axis(~./2, name = "Stringency")) +
+  ggtitle("New Cases of Covid 19 per 100k People vs State Mitigation Efforts",
+          subtitle = "Ordered from Most Stringent to Least Stringent Covid Mitigation Policy") +
+  labs(caption = "Created by Andrew F. Griffin, Covid Data from The Covid Tracking Project") +
+  scale_x_date(date_labels = "%b", breaks= "1 month") +
+  coord_cartesian(xlim = ind_xlim_3m, ylim = c(0, max(covid$new_cases_percap_07da) * 1.1)) +
+  geom_hline(yintercept=0, col = "grey40", size = .2) +
+  theme_DataStache() +
+  theme(axis.text.x = element_text(angle=90, hjust = 1)) +
+  facet_wrap(. ~ state_name,
+             strip.position="bottom") +
+  theme(strip.text.x = element_text(size = rel(.5),
+                                    face = "bold",
+                                    margin = margin(rel(.5), rel(1), rel(.5), rel(1))))
+
+p_ALL_states_cases_policy
+
+width <- 6
+height <- 6 
+
+ggsave(paste("figs/state-grid-cases-policy-", tdy_date, ".png", sep = ""),
+       width = width,
+       dpi = "retina")
