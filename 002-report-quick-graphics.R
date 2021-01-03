@@ -21,8 +21,6 @@ p_US_new_case_plot <- covid_us_sum %>%
   geom_bar(stat = "identity", fill="blue", alpha = .2, size = .1) +
   scale_color_manual(values="light grey") +
   geom_line(aes(y = new_cases_07da), size = .2, col="blue") +
-  xlab("Date") +
-  ylab("New Total Cases") +
   ggtitle("US Total New Cases") +
   labs(caption = "Created by Andrew F. Griffin\nCovid Data from The Covid Tracking Project") +
   scale_x_date(date_labels = "%b", breaks= "1 month", expand = c(0,0)) +
@@ -38,8 +36,6 @@ p_US_new_test_plot <- covid_us_sum %>%
   geom_bar(stat = "identity", fill="dark green", alpha = .2, size = .1) +
   scale_color_manual(values="light grey") +
   geom_line(aes(y = new_tests_07da), size = .2, col="dark green") +
-  xlab("Date") +
-  ylab("New Total Tests") +
   ggtitle("US Total New Tests") +
   labs(caption = "Created by Andrew F. Griffin\nCovid Data from The Covid Tracking Project") +
   scale_x_date(date_labels = "%b", breaks= "1 month", expand = c(0,0)) +
@@ -55,8 +51,6 @@ p_US_new_deaths_plot <- covid_us_sum %>%
   geom_bar(stat = "identity", fill="dark red", alpha = .2, size = .1) +
   scale_color_manual(values="light grey") +
   geom_line(aes(y = new_death_07da), size = .2, col="dark red") +
-  xlab("Date") +
-  ylab("New Total Deaths") +
   ggtitle("US Total New Deaths") +
   labs(caption = "Created by Andrew F. Griffin\nCovid Data from The Covid Tracking Project") +
   scale_x_date(date_labels = "%b", breaks= "1 month", expand = c(0,0)) +
@@ -72,13 +66,11 @@ p_US_percent_pos <- covid_us_sum %>%
   geom_bar(stat = "identity", fill="deepskyblue4", alpha = .2, size = .1) +
   scale_color_manual(values="light grey") +
   geom_line(aes(y = percent_pos_07da), size = .2, col="deepskyblue4") +
-  xlab("Date") +
-  ylab("Percent Positive") +
   ggtitle("US Percent Positive") +
   labs(caption = "Created by Andrew F. Griffin\nCovid Data from The Covid Tracking Project") +
   scale_x_date(date_labels = "%b", breaks= "1 month", expand = c(0,0)) +
   scale_y_continuous(expand = c(0,0)) +
-  coord_cartesian(xlim = c(ymd(20200315), NA), ylim = c(0, max(covid_us_sum$percent_pos_07da, na.rm = TRUE) * 1.1)) +
+  coord_cartesian(xlim = c(ymd(20200315), NA)) +
   theme_DataStache() +
   theme(text = element_text(size = rel(.6)))
 
@@ -89,8 +81,6 @@ p_US_hosp <- covid_us_sum %>%
   geom_bar(stat = "identity", fill="orange4", alpha = .2, size = .1) +
   scale_color_manual(values="light grey") +
   geom_line(aes(y = cur_hosp_07da), size = .2, col="orange4") +
-  xlab("Date") +
-  ylab("Percent Positive") +
   ggtitle("US Hospitalization") +
   labs(caption = "Created by Andrew F. Griffin\nCovid Data from The Covid Tracking Project") +
   scale_x_date(date_labels = "%b", breaks= "1 month", expand = c(0,0)) +
@@ -106,8 +96,6 @@ p_US_new_hosp <- covid_us_sum %>%
   geom_bar(stat = "identity", fill="orange4", alpha = .2, size = .1) +
   scale_color_manual(values="light grey") +
   geom_line(aes(y = new_hosp_07da), size = .2, col="orange4") +
-  xlab("Date") +
-  ylab("Percent Positive") +
   ggtitle("US New Hospitalization") +
   labs(caption = "Created by Andrew F. Griffin\nCovid Data from The Covid Tracking Project") +
   scale_x_date(date_labels = "%b", breaks= "1 month", expand = c(0,0)) +
@@ -347,7 +335,7 @@ policy <- covid %>%
   select(state, state_name, date, new_cases_percap, new_cases_percap_07da) %>%
   left_join(policy)
 
-## MEAN HOSPITALIZATION
+## CASES vs POLICY BY POLICY
 
 policy_order <- policy %>%
   filter(date >= as.Date(date[1] - 6)) %>%
@@ -385,5 +373,41 @@ width <- 6
 height <- 6 
 
 ggsave(paste("figs/state-grid-cases-policy-", tdy_date, ".png", sep = ""),
+       width = width,
+       dpi = "retina")
+
+
+
+## CASES vs POLICY BY CASES
+
+p_ALL_states_cases_policy_by_case <- policy %>%
+  mutate(state_name = factor(state_name, levels = case_order)) %>%
+  filter(date >= ymd(20200315)) %>%
+  ggplot(aes(x = date, y = new_cases_percap)) +
+  geom_hline(yintercept=0, col = "grey40", size = .25) +
+  geom_bar(stat = "identity", alpha = .2, size = .1, fill = "darkblue") +
+  geom_line(aes(x = date, y = new_cases_percap_07da), color = "darkblue", size = .25) +
+  geom_line(aes(y = mean_index * 2), color = "red4", size = .5) +
+  scale_y_continuous(sec.axis = sec_axis(~./2, name = "Stringency")) +
+  ggtitle("New Cases of Covid 19 per 100k People vs State Mitigation Efforts",
+          subtitle = "Ordered from Most Stringent to Least Stringent Covid Mitigation Policy") +
+  labs(caption = "Created by Andrew F. Griffin, Covid Data from The Covid Tracking Project") +
+  scale_x_date(date_labels = "%b", breaks= "1 month") +
+  coord_cartesian(xlim = ind_xlim_3m, ylim = c(0, max(covid$new_cases_percap_07da) * 1.1)) +
+  geom_hline(yintercept=0, col = "grey40", size = .2) +
+  theme_DataStache() +
+  theme(axis.text.x = element_text(angle=90, hjust = 1)) +
+  facet_wrap(. ~ state_name,
+             strip.position="bottom") +
+  theme(strip.text.x = element_text(size = rel(.5),
+                                    face = "bold",
+                                    margin = margin(rel(.5), rel(1), rel(.5), rel(1))))
+
+p_ALL_states_cases_policy_by_case
+
+width <- 6
+height <- 6 
+
+ggsave(paste("figs/state-grid-cases-policy-by-case-", tdy_date, ".png", sep = ""),
        width = width,
        dpi = "retina")

@@ -8,7 +8,7 @@ dat <- covid %>%
   left_join(policy) %>%
   select(state, date, new_cases_percap, new_cases_percap_07da, stringency_index, government_index, containment_index, economic_index, mean_index)
 
-st <- 'KY'
+st <- 'AZ'
 
 dat %>%
   filter(date >= ymd(20200315) & state == st) %>%
@@ -21,7 +21,9 @@ dat %>%
   labs(caption = "Created by Andrew F. Griffin\nCovid Data from The Covid Tracking Project") +
   scale_x_date(date_labels = "%b", breaks= "1 month", expand = c(0,0)) +
   scale_y_continuous(expand = c(0,0)) +
-  coord_cartesian(xlim = c(ymd(20200315), NA), ylim = c(0, max(covid$new_cases_percap_07da[covid$state == st], na.rm = TRUE) * 1.1)) +
+  coord_cartesian(xlim = c(ymd(20200315), NA), ylim = c(0, ifelse(max(covid$new_cases_percap_07da[covid$state == st], na.rm = TRUE) * 1.1 >= 100,
+                                                                      max(covid$new_cases_percap_07da[covid$state == st], na.rm = TRUE) * 1.1,
+                                                                      100))) +
   theme_DataStache() +
   theme(text = element_text(size = rel(.6)))
 

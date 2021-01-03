@@ -11,7 +11,7 @@ h <- read_html(url)
 pres_results_2020 <- h %>% html_nodes('table')
 
 # HTML TO TABLE
-pres_results_2020 <- pres_results_2020[[33]] %>% html_table(fill = TRUE)
+pres_results_2020 <- pres_results_2020[[32]] %>% html_table(fill = TRUE)
 
 # RENAME COLUMNS
 pres_results_2020 <- pres_results_2020 %>% setNames(c('state', 'Biden_DEM_vote', 'Biden_DEM_share', 'Biden_DEM_EV', 'Trump_REP_vote', 'Trump_REP_share', 'Trump_REP_EV', 'Jorgensen_LIB_vote', 'Jorgensen_LIB_share',

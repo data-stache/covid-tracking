@@ -110,31 +110,6 @@ covid_pol %>% filter(date == ymd(20201201)) %>% select(state, lean_avg, state_le
 
 save(covid_pol, file = "rda/covid_pol.rda")
 
-# PARTISAN GRAPHING
-
-avg_lean <- covid_pol %>% filter(date == ymd(20201201)) %>% select(state, lean_avg, state_lean) %>% arrange(lean_avg) %>% .$state
-
-covid_pol %>%
-  filter(date == ymd(20201201) & lean_avg < 0) %>%
-  mutate(state = factor(state, levels = avg_lean)) %>%
-  select(state, lean_avg, slpli, pvi, lean_2020) %>%
-  gather(metric, rating, lean_avg:lean_2020) %>%
-  ggplot(aes(x = state, y = rating, fill = metric)) +
-  geom_bar(stat = 'identity', position = 'dodge') +
-  coord_flip() +
-  scale_y_continuous(expand = c(0, 0)) +
-  scale_y_reverse()
-
-covid_pol %>%
-  filter(date == ymd(20201201) & lean_avg > 0) %>%
-  mutate(state = factor(state, levels = avg_lean)) %>%
-  select(state, lean_avg, slpli, pvi, lean_2020) %>%
-  gather(metric, rating, lean_avg:lean_2020) %>%
-  ggplot(aes(x = state, y = rating, fill = metric)) +
-  geom_bar(stat = 'identity', position = 'dodge') +
-  scale_y_continuous(expand = c(0, 0)) +
-  coord_flip()
-  
 
 # CLEAR ENVIRONS
 rm(list=ls())

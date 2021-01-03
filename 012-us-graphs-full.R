@@ -66,7 +66,7 @@ p_US_percent_pos <- covid_us_sum %>%
   labs(caption = "Created by Andrew F. Griffin\nCovid Data from The Covid Tracking Project") +
   scale_x_date(date_labels = "%b", breaks= "1 month", expand = c(0,0)) +
   scale_y_continuous(expand = c(0,0)) +
-  coord_cartesian(xlim = c(ymd(20200301), NA), ylim = c(0, max(covid_us_sum$percent_pos_07da, na.rm = TRUE) * 1.1)) +
+  coord_cartesian(xlim = c(ymd(20200301), NA), ylim = c(0, .3)) +
   theme_DataStache() +
   theme(text = element_text(size = rel(.6)))
 

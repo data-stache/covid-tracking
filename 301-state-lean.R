@@ -1,4 +1,5 @@
-##### DATA LOAD #####
+{
+  ##### DATA LOAD #####
 library(lubridate)
 library(broom)
 library(ggrepel)
@@ -16,10 +17,11 @@ covid_pol <- covid_pol %>%
 #  filter(date < ymd(20201101)) %>%
   # CHANGE SLPLI TO - DEM and + REP
   # THIN COLUMNS
-  select(date, state, state_name, pop, new_cases, new_tests, new_death, hosp, percent_pos, lean_avg, state_lean, party_by, pvi) %>%
+  select(date, state, state_name, pop, new_cases, new_tests, new_death, hosp, percent_pos, lean_avg, state_lean, slpli, pvi, lean_2020) %>%
   # MAKE PVI A DECIMAL and Z SCORES
   mutate(cases = new_cases / pop * 100000)
 head(covid_pol)
+}
 
 ##### CASES PER CAPITA VS POLITICAL LEANINGS (FULL PANDEMIC) #####
 # TOTAL CASES OF COVID
@@ -523,7 +525,7 @@ P_deaths <- covid_pol %>%
   geom_hline(yintercept = 0, size = .5, col = "40grey") +
   geom_line() +
   geom_point(aes(y = deaths), data = dat_ends) +
-  geom_text(aes(label = round(deaths, 1)), data = dat_ends, nudge_x = 3, hjust = 0) +
+  geom_text(aes(label = round(deaths, 2)), data = dat_ends, nudge_x = 3, hjust = 0) +
   scale_color_manual(values = pol_party) +
   theme_DataStache() +
   ggtitle("Does Political Leaning Impact Covid Deaths") +
@@ -556,6 +558,11 @@ P_tests <- covid_pol %>%
        subtitle = "Tests Per 100k People in Democratic vs Republican Leaning States\nLean based on FiveThirtyEight SLPLI and Cook PVI")
 P_tests
 
+ggsave("figs/state-lean-time-series-testing.png",
+       width = p_width,
+       height = p_height, 
+       dpi = "retina")
+
 # POSITIVE
 dat_ends <- covid_pol %>%
   filter(date >= ymd(20200301)) %>%
@@ -576,7 +583,7 @@ P_pos <- covid_pol %>%
 #  geom_ribbon(aes(ymin = .1, ymax = 1), fill = 'red4', alpha = .3) +
   geom_line() +
   geom_point(aes(y = pos), data = dat_ends) +
-  geom_text(aes(label = round(pos, 2)), data = dat_ends, nudge_x = 3, hjust = 0) +
+  geom_text(aes(label = round(pos, 3)), data = dat_ends, nudge_x = 3, hjust = 0) +
   scale_color_manual(values = pol_party) +
   coord_cartesian(ylim = c(0, .3)) +
   theme_DataStache() +
