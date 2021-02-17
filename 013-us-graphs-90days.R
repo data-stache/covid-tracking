@@ -14,6 +14,8 @@ p_US_new_case_plot <- covid_us_sum %>%
   ggtitle("US Total New Cases",
           subtitle = "Past 90 Days") +
   labs(caption = "Created by Andrew F. Griffin\nCovid Data from The Covid Tracking Project") +
+  geom_vline(xintercept = ymd(20201225)) +
+  geom_vline(xintercept = ymd(20201225) + 14) +
   coord_cartesian(xlim = ind_xlim_3m, ylim = c(0,NA)) +
   scale_x_date(date_labels = "%b", breaks= "1 month", expand = c(.05,.05)) +
   scale_y_continuous(expand = c(0, 0)) +
