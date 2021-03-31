@@ -17,18 +17,19 @@ load("rda/vaccinations.rda")
 
 # Variables --------------------------------------------------------------------
 RUN_DATE <- Sys.Date()
-# STATE <- 'KY'
+if (FALSE) {
+STATE <- 'DE'
 
-#dat_vac <- vaccinations %>%
-#  filter(state == STATE)
+dat_vac <- vaccinations %>%
+  filter(state == STATE)
 
 
 
 # Single State ------------------------------------------------------------------
-#dat_vac %>%
-#  select(date, state, share_used_doses) %>%
-#  kable()
-
+dat_vac %>%
+  select(date, state, share_pop_vaccinated, share_pop_fully_vaccinated, share_used_doses) %>%
+  kable()
+}
 
 
 # Make Grpahs ------------------------------------------------------------------

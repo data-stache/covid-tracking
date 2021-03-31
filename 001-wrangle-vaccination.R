@@ -11,6 +11,8 @@ RUN_DATE <- Sys.Date()
 
 vaccinations <- read.csv('https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/vaccinations/us_state_vaccinations.csv')
 
+vaccinations$location[vaccinations$location == 'New York State'] <- 'New York'
+
 populations <- read.csv("data/us-census-population-data.csv")
 populations <- populations %>%
   mutate(state = factor(state)) %>%
@@ -55,6 +57,23 @@ vaccinations <- vaccinations %>%
   select(-share_doses_used)
 
 save(vaccinations, file = 'rda/vaccinations.rda')
+
+names(vaccinations)
+
+vaccinations %>%
+  group_by(date) %>%
+  summarize(population = sum(population[1]),
+            total_vaccinations = sum(total_vaccinations),
+            people_vaccinated = sum(people_vaccinated),
+            people_fully_vaccinated = sum(people_fully_vaccinated),
+            new_vaccinations = sum(new_vaccinations),
+            new_people_vaccinated = sum(new_people_vaccinated),
+            new_fully_vaccinated = sum(new_fully_vaccinated)) %>%
+  arrange(desc(date)) %>%
+  mutate(share_pop_vaccinated = people_vaccinated / population,
+         share_pop_fully_vaccinated = people_fully_vaccinated / population)
+            
+  
 
 # Vaccination Last Update ------------------------------------------------------
 max(vaccinations$date)
