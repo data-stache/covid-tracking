@@ -21,7 +21,9 @@ populations <- populations %>%
 # Load Data --------------------------------------------------------------------
 load("rda/vaccinations.rda")
 
-STATE <- 'NY'
+STATE <- 'CO'
+
+tdy_date <- max(vaccinations$date)
 
 dat <- vaccinations %>%
   filter(state == STATE)
@@ -97,4 +99,39 @@ window
 
 
 
+# Graph of Fits ----------------------------------------------------------------
 
+pred_exp <- as.integer(pred_exp)
+pred_lm <- as.integer(pred_lm)
+
+dat_visual <- data.frame(day_count,
+                         pred_exp,
+                         pred_lm)
+
+G <- dat_visual %>%
+  left_join(dat) %>%
+  select(state, day_count, date, people_fully_vaccinated, pred_lm, pred_exp) %>%
+  mutate(state = paste(STATE),
+         date = seq(ymd(20210112), ymd(20210112) + (max(day_count)-1), 'day')) %>%
+  ggplot(aes(x = date)) +
+  ggtitle(paste(STATE, '- Potential Dates to Reach 70% Immunization')) +
+  geom_ribbon(aes(ymax = pred_exp, ymin = pred_lm), color = 'grey', alpha = .2) +
+  geom_hline(yintercept = THRESHOLD, size = .5, color = 'red') +
+  geom_point(aes(y = people_fully_vaccinated), alpha = .5, size = .3) +
+  geom_line(aes(y = pred_lm), color = 'darkblue', size = .2) +
+  geom_line(aes(y = pred_exp), color = 'darkgreen', size = .2) +
+  geom_label(aes(x = window[1], y = THRESHOLD, label = window[1]), size = 2) +
+  geom_label(aes(x = window[2], y = THRESHOLD, label = window[2]), size = 2) +
+  coord_cartesian(ylim = c(0, THRESHOLD + 1000), xlim = c(min(dat$date), lm_pred_date)) +
+  theme_DataStache()
+
+G
+
+p_width <- 12
+p_height <- (9/16) * p_width  
+
+ggsave(paste("figs/", STATE, '-', tdy_date, ".png", sep = ""),
+       G,
+       width = p_width,
+       height = p_height,
+       dpi = "retina")

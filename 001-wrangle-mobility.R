@@ -3,8 +3,8 @@ library(lubridate)
 library(zoo)
 
 # LAST UPDATE ?
-load("rda/mobility_update.rda")
-mobility_update
+# load("rda/mobility_update.rda")
+# mobility_update
 
 # MOBILITY DATA
 url <- "https://www.gstatic.com/covid19/mobility/Global_Mobility_Report.csv"
@@ -39,3 +39,6 @@ save(mobility, file = "rda/mobility.rda")
 # Last Update
 mobility_update <- max(mobility$date)
 save(mobility_update, file = "rda/mobility_update.rda")
+
+# CLEAR ENVIRONS
+rm(list=ls())

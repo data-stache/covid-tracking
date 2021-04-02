@@ -1,30 +1,21 @@
-library(tidyverse)
-library(stringr)
-library(lubridate)
+# Load Libraries ---------------------------------------------------------------
+{
+  library(tidyverse)
+  library(stringr)
+  library(lubridate)
+}
 
-# CLEAR ENVIRONS
-rm(list=ls())
 
-##### PULL POLITICAL DATA ####
+
+# Pull Politicl Data -----------------------------------------------------------
 slpli <- read.csv("data/slpli-and-party.csv")
-governors <- read.csv("data/gov-party.csv")
 cook_pvi <- read.csv("data/cook-pvi.csv")
-load("rda/covid.rda")
+load("rda/covid_state.rda")
 load('rda/pres_results_2020.rda')
 
-##### GOVERNORS #####
-# LOWERCASE TEXT
-governors$governor_party <- str_replace(governors$governor_party, "REPUBLICAN", "Republican")
-governors$governor_party <- str_replace(governors$governor_party, "DEMOCRAT", "Democrat")
-
-# ADD ABBREVIATION
-governors <- governors %>%
-  mutate(gov_party = case_when(governor_party == "Republican" ~ "R",
-                               governor_party == "Democrat" ~ "D"))
-save(governors, file = "rda/governors.rda")
 
 
-##### SLPLI #####
+# SLPLI ------------------------------------------------------------------------
 slpli <- slpli %>%
   # MAKE DC DEMOCRAT
   mutate(SLPLI = ifelse(is.na(SLPLI), "Democrat", SLPLI),
@@ -35,16 +26,18 @@ slpli <- slpli %>%
   select(state, slpli, slpli_party)
 save(slpli, file = "rda/slpli.rda")
 
-##### COOK PVI #####
+
+
+# Cook PVI ---------------------------------------------------------------------
 # ADD STATE ABBREVIATIONS
 cook_pvi <- cook_pvi %>%
   rename(state_name = State,
          pvi = PVI)
-cook_pvi <- covid %>% 
+cook_pvi <- covid_state %>% 
   filter(date == ymd(20201001)) %>%
-  select(state, state_name) %>%
+  select(state_name = state) %>%
   left_join(cook_pvi)
-cook_pvi <- cook_pvi[,c(1,3)]
+cook_pvi <- cook_pvi[,c(1,2)]
 
 # FILTER NA
 cook_pvi <- cook_pvi %>%
@@ -64,17 +57,33 @@ save(cook_pvi, file = "rda/cook_pvi.rda")
 ##### 2020 ELECTION CLEANUP #####
 head(pres_results_2020)
 
+pres_results_2020 <- pres_results_2020 %>%
+  mutate(rep_total = gsub(',', '', rep_total),
+         rep_total = as.numeric(rep_total),
+         dem_total = gsub(',', '', dem_total),
+         dem_total = as.numeric(dem_total),
+         total_votes = gsub(',', '', total_votes),
+         total_votes = as.numeric(total_votes),
+         margin = (rep_total - dem_total) / total_votes) %>%
+  filter(!state %in% c('Maine CD-1', 'Maine CD-2', 'Nebraska CD-1', 'Nebraska CD-2', 'Nebraska CD-3')) %>%
+  select(state, margin)
+
+pres_results_2020$state[pres_results_2020$state == 'Nev.[o]'] <- 'Nevada'
+pres_results_2020$state[pres_results_2020$state == 'N.J.[p]'] <- 'New Jersey'
+pres_results_2020$state[pres_results_2020$state == 'N.Y.[q]'] <- 'New York'
+pres_results_2020$state[pres_results_2020$state == 'Texas[s]'] <- 'Texas'
+
 # ADD STATE ABBREVIATIONS
-pres_results_2020 <- covid %>% 
+pres_results_2020 <- covid_state %>% 
   filter(date == ymd(20201001)) %>%
-  select(state, state_name) %>%
   right_join(pres_results_2020) %>%
-  select(state, lean_2020) %>%
+  select(state, lean_2020 = margin) %>%
   mutate(party_2020 = case_when(lean_2020 > 0 ~ 'R',
                                 lean_2020 < 0 ~ 'D'))
   
 
-##### BUILD POLITICAL COVID DATA SET #####
+
+# Build Political Data Set -----------------------------------------------------
 covid_pol <- covid %>%
   filter(!state == "PR") %>%
   left_join(slpli) %>% 
